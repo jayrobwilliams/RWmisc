@@ -28,8 +28,10 @@ dup.bidirec <- function (x) {
   
 }
 
-## read in TIES data
-TIES <- read.csv('~/Dropbox/Datasets/TIES/TIES.csv')
+## read in TIES data; these are the corrected data created by running the file
+## TIESCorrections.do, and then exported to .csv. you could also use foreign() to
+## load the .dta file instead. be sure to put the correct file path to the data.
+TIES <- read.csv('TIES.csv')
 
 ## recode ongoing sanctions as concluded one year after ongoing mention
 for (i in 1:nrow(TIES)) {
