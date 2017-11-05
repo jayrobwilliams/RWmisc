@@ -59,7 +59,7 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   if (lapply(mod, class)[[1]] == 'stanfit') {
     
     ## extract coefficient names from list of model ojects
-    coef_names <- lapply(mod, function(x) rownames(summary(x, pars = pars)$summary))
+    coef_names <- lapply(mod, function(x) rownames(rstan::summary(x, pars = pars)$summary))
     
     ## extract posterior samples from list of model objects
     samps <- lapply(mod, function(x) as.data.frame(rstan::extract(x, pars = pars)))
@@ -161,3 +161,5 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   }
   
 }
+
+## need to figure out how to get log likelihood matrix from various objects for WAIC
