@@ -37,9 +37,6 @@
 mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
                     model_names, custom_coef, caption, label, file_name) {
   
-  ## load required packages
-  require(texreg)
-  
   ## if only one model object, coerce to a list
   if (class(mod) != 'list') mod <- list(mod)
   
@@ -131,15 +128,15 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   if (!missing(custom_coef)) coef_names <- custom_coef
   
   ## create list of texreg objects with point estimates and interval
-  tr_list <- mapply(function(x, y, z) createTexreg(coef.names = x,
-                                                   coef = y,
-                                                   ci.low = z[1, ],
-                                                   ci.up = z[2, ]),
+  tr_list <- mapply(function(x, y, z) texreg::createTexreg(coef.names = x,
+                                                           coef = y,
+                                                          ci.low = z[1, ],
+                                                          ci.up = z[2, ]),
                     coef_names, samps_pe, samps_ci)
   
   ## create LaTeX code
-  tr <- texreg(l = tr_list, custom.model.names = model_names, caption = caption,
-               label = label)
+  tr <- texreg::texreg(l = tr_list, custom.model.names = model_names,
+                       caption = caption, label = label)
   
   if (hpdi == F) {
     
