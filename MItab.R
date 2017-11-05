@@ -11,7 +11,7 @@
 ## This script contains various functions to create a rudimentary regression
 ## output table for multiple imputation models using MICE.. The function
 ## MI.table() creates the table, while the others are subfuctions which prepare
-##the necessary  information. MI.table() can produce LaTeX or html output, and
+## the necessary  information. MI.table() can produce LaTeX or html output, and
 ## can save the resulting table to a file if desired. MI.table() is designed to
 ## only be used on a single model object at a time; the user will have to manually
 ## combine the output from multiple models into one table if they wish to present
