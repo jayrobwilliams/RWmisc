@@ -17,8 +17,6 @@
 
 ## arguments:
 ## mod: a single MCMC model object, or a list of model objects of the same class.
-##      mcmc.list objects are not accepted; instead, they should be combined into
-##      a single mcmc object containing all chains.
 ## pars: a scalar or vector of the parameters you wish to include in the table.
 ##       stanfit objects can use either the individual parameter names, or the
 ##       names of the indexed parameter to retrieve the entire parameter e.g.
@@ -70,7 +68,24 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   if (lapply(mod, class)[[1]] == 'runjags') {
     
     ## extract posterior samples from list of model objects
-    samps <- lapply(mod, function(x) as.data.frame(runjags:::as.mcmc.runjags(x, vars = pars)))
+    samps <- lapply(mod, function(x) runjags:::as.mcmc.list.runjags(x, vars = pars))
+    
+    ## average over chains and convert to dataframe
+    samps <- lapply(samps, function(x) as.data.frame(Reduce("+", x) / length(x)))
+    
+    ## extract coefficient names from dataframe
+    coef_names <- lapply(samps, colnames)
+    
+  }
+  
+  ## extract samples and variable names from mcmc.list object
+  if (lapply(mod, class)[[1]] == 'mcmc.list') {
+    
+    ## extract posterior samples from list of model objects
+    samps <- lapply(mod, function(x) as.data.frame(Reduce("+", x) / length(x)))
+    
+    ## drop columns not in pars
+    samps <- lapply(samps, function(x) x[, colnames(x) %in% pars])
     
     ## extract coefficient names from dataframe
     coef_names <- lapply(samps, colnames)
