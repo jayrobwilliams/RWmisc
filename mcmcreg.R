@@ -3,15 +3,17 @@
 ## contact: jayrobwilliams@gmail.com ##
 ## project: misc R functions         ##
 ## created: November 4, 2017         ##
-## updated: November 5, 2017         ##
+## updated: November 6, 2017         ##
 #######################################
 
-## this function is a wrapper to texreg() which produces a standard regression
-## table with interval measure of uncertainty for MCMC output. the user can
-## specify the confidence level of the interval, as well as credible or highest
-## posterior density intervals. many of the arguments are standard texreg()
+## this function is a wrapper to texreg() which produces publication quality
+## regression table with interval measures of uncertainty for MCMC output. the
+## user can specify the confidence level of the interval, as well as credible or
+## highest posterior density intervals. many of the arguments are standard texreg
 ## arguments that are passed to texreg() at the end of the function to create
 ## the table.
+
+## inspiration drawn from Johannes Karreth's mcmctab function
 
 ## depends on texreg and whichever MCMC package the model object(s) require
 
@@ -23,45 +25,55 @@
 ##       pars = 'beta' will return beta[1], beta[2], and beta[3] for a stanfit
 ##       model with a three element beta parameter. parameter arguments for all
 ##       other model object types must contain the entire set of parameters you
-##       wish to include in the table.
+##       wish to include in the table. when combining models with different
+##       parameters in one table, this argument also accepts a list the length
+##       of the number of models. this is necessary when combining JAGS models
+##       with different parameters because coda and JAGS related packages do not
+##       support parameter family extraction like Stan.
 ## point_est: a character indicating whether to use the mean or median for point
 ##            estimates in the table.
 ## ci: a scalar indicating the confidence level of the uncertainty intervals.
 ## hpdi: a logical indicating whether to use highest posterior density intervals.
 ## model_names: an optional vector of models names.
-## custom_coef: an optional vector of parameter names. if not supplied, the
-##              function will use the parameter names in the model object(s).
+## custom_coef: an optional vector or list of vectors containing parameter names
+##              for each model. if there are multiple models, the list must have
+##              the same number of elements as there are models, and the vector
+##              of names in each list element must match the number of parameters.
+##              if not supplied, the function will use the parameter names in the
+##              model object(s).
 ## caption: an optional caption for the table.
 ## label: an optional label for the table.
+## reorder_coef: an optional vector reordering the coefficients in the final
+##               texreg table
+## sideways: a logical indicating whether to rotate the table; this function sets
+##           use.packages = F in texreg(), so you will have to add the rotating
+##           package to your preamble.
+## filename: an optional character giving the name of a file to save the table to
 
 mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
-                    model_names, custom_coef, caption, label, sideways = F,
-                    reorder_coef, file_name) {
+                    model_names = NULL, custom_coef = NULL, caption,
+                    label = NULL, reorder_coef = NULL, sideways = F, filename) {
   
   ## if only one model object, coerce to a list
   if (class(mod) != 'list') mod <- list(mod)
   
-  ## if no model names, assign defaults
-  if (missing(model_names)) model_names <- NULL
+  ## if only one parameter vector, coerce to a list
+  if (class(pars) != 'list') pars <- list(pars)
   
   ## if no caption, assign default
   if (missing(caption) & length(mod) > 1) caption <- 'Statistical Models'
   if (missing(caption) & length(mod) == 1) caption <- 'Statistical Model'
   
-  ## if no label, assign default
-  if (missing(label)) label <- NULL
-  
-  ## if no custom coefficient order, assign default
-  if (missing(reorder_coef)) reorder_coef <- NULL
-  
   ## extract samples and variable names from stanfit object
   if (lapply(mod, class)[[1]] == 'stanfit') {
     
     ## extract coefficient names from list of model ojects
-    coef_names <- lapply(mod, function(x) rownames(rstan::summary(x, pars = pars)$summary))
+    coef_names <- mapply(function(x, y) rownames(rstan::summary(x, pars = y)$summary),
+                         mod, pars, SIMPLIFY = F)
     
     ## extract posterior samples from list of model objects
-    samps <- lapply(mod, function(x) as.data.frame(rstan::extract(x, pars = pars)))
+    samps <- mapply(function(x, y) as.data.frame(rstan::extract(x, pars = y)),
+                    mod, pars, SIMPLIFY = F)
     
   }
   
@@ -69,7 +81,8 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   if (lapply(mod, class)[[1]] == 'runjags') {
     
     ## extract posterior samples from list of model objects
-    samps <- lapply(mod, function(x) runjags:::as.mcmc.list.runjags(x, vars = pars))
+    samps <- mapply(function(x, y) runjags:::as.mcmc.list.runjags(x, vars = y),
+                    mod, pars, SIMPLIFY = F)
     
     ## average over chains and convert to dataframe
     samps <- lapply(samps, function(x) as.data.frame(Reduce("+", x) / length(x)))
@@ -86,7 +99,8 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
     samps <- lapply(mod, function(x) as.data.frame(Reduce("+", x) / length(x)))
     
     ## drop columns not in pars
-    samps <- lapply(samps, function(x) x[, colnames(x) %in% pars])
+    samps <- mapply(function(x, y) x[, colnames(x) %in% y], samps, pars,
+                    SIMPLIFY = F)
     
     ## extract coefficient names from dataframe
     coef_names <- lapply(samps, colnames)
@@ -97,7 +111,8 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   if (lapply(mod, class)[[1]] == 'mcmc') {
     
     ## extract posterior samples from list of model objects
-    samps <- lapply(mod, function(x) coda:::as.data.frame.mcmc(x, vars = pars))
+    samps <- mapply(function(x) coda:::as.data.frame.mcmc(x, vars = y),
+                    mod, pars, SIMPLIFY = F)
     
     ## extract coefficient names from dataframe
     coef_names <- lapply(samps, colnames)
@@ -129,7 +144,15 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   }
   
   ## if coefficent names supplied, replace names from model object(s)
-  if (!missing(custom_coef)) coef_names <- custom_coef
+  if (!is.null(custom_coef) & !is.list(custom_coef)) coef_names <- list(custom_coef)
+  if (!is.null(custom_coef)) coef_names <- custom_coef
+  
+  ##
+  if (length(mod) != length(coef_names)) {
+
+    stop('number of models does not match number of custom coefficient vectors')
+    
+  }
   
   ## create list of texreg object(s) with point estimates and interval
   tr_list <- mapply(function(x, y, z) texreg::createTexreg(coef.names = x,
@@ -158,7 +181,7 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   }
   
   ## return LaTeX code to console or write to file
-  if (missing(file_name)) {
+  if (missing(filename)) {
     
     tr
     
@@ -167,7 +190,7 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
     ## remove newline at start of LaTeX code
     tr <- sub('^\\n', '', tr)
     
-    tex_file <- file(paste(file_name, 'tex', sep = '.'))
+    tex_file <- file(paste(filename, 'tex', sep = '.'))
     writeLines(tr, tex_file, sep = '')
     close(tex_file)
     
