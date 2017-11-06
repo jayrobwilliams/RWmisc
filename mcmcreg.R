@@ -35,20 +35,24 @@
 ## label: an optional label for the table.
 
 mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
-                    model_names, custom_coef, caption, label, file_name) {
+                    model_names, custom_coef, caption, label, sideways = F,
+                    reorder_coef, file_name) {
   
   ## if only one model object, coerce to a list
   if (class(mod) != 'list') mod <- list(mod)
   
   ## if no model names, assign defaults
-  if (missing(model_names)) model_names <- paste('Model', 1:length(mod))
+  if (missing(model_names)) model_names <- NULL
   
   ## if no caption, assign default
   if (missing(caption) & length(mod) > 1) caption <- 'Statistical Models'
   if (missing(caption) & length(mod) == 1) caption <- 'Statistical Model'
   
   ## if no label, assign default
-  if (missing(label)) label <- 'tab'
+  if (missing(label)) label <- NULL
+  
+  ## if no custom coefficient order, assign default
+  if (missing(reorder_coef)) reorder_coef <- NULL
   
   ## extract samples and variable names from stanfit object
   if (lapply(mod, class)[[1]] == 'stanfit') {
@@ -124,40 +128,38 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
     
   }
   
-  ## if coefficent names supplied 
+  ## if coefficent names supplied, replace names from model object(s)
   if (!missing(custom_coef)) coef_names <- custom_coef
   
-  ## create list of texreg objects with point estimates and interval
+  ## create list of texreg object(s) with point estimates and interval
   tr_list <- mapply(function(x, y, z) texreg::createTexreg(coef.names = x,
                                                            coef = y,
-                                                          ci.low = z[1, ],
-                                                          ci.up = z[2, ]),
+                                                           ci.low = z[1, ],
+                                                           ci.up = z[2, ]),
                     coef_names, samps_pe, samps_ci)
   
   ## create LaTeX code
   tr <- texreg::texreg(l = tr_list, custom.model.names = model_names,
-                       caption = caption, label = label)
-  
+                       caption = caption, label = label, sideways = sideways,
+                       reorder.coef = reorder_coef, use.packages = F)
+  ## replace confidence w/ credible or highest posterior density in texreg output
   if (hpdi == F) {
     
-    ## replace confidence w/ credible in texreg output
     tr <- sub('outside the confidence interval',
               paste('outside ', ci * 100 ,'\\\\% credible interval', sep = ''),
               tr)
     
   } else {
     
-    ## replace confidence w/ highest posterior density in texreg output
     tr <- sub('outside the confidence interval',
               paste('outside ', ci * 100 ,'\\\\% highest posterior density interval',
                     sep = ''), tr)
     
   }
   
-  ## check if file name supplied
+  ## return LaTeX code to console or write to file
   if (missing(file_name)) {
     
-    ## return LaTeX code to console
     tr
     
   } else {
@@ -165,7 +167,6 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
     ## remove newline at start of LaTeX code
     tr <- sub('^\\n', '', tr)
     
-    ## write LaTeX code to file
     tex_file <- file(paste(file_name, 'tex', sep = '.'))
     writeLines(tr, tex_file, sep = '')
     close(tex_file)
