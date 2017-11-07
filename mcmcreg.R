@@ -3,7 +3,7 @@
 ## contact: jayrobwilliams@gmail.com ##
 ## project: misc R functions         ##
 ## created: November 4, 2017         ##
-## updated: November 6, 2017         ##
+## updated: November 7, 2017         ##
 #######################################
 
 ## this function is a wrapper to texreg() which produces publication quality
@@ -34,6 +34,7 @@
 ##            estimates in the table.
 ## ci: a scalar indicating the confidence level of the uncertainty intervals.
 ## hpdi: a logical indicating whether to use highest posterior density intervals.
+## ci_test: value to compare for the interval test. set to NULL for no stars.
 ## model_names: an optional vector of models names.
 ## custom_coef: an optional vector or list of vectors containing parameter names
 ##              for each model. if there are multiple models, the list must have
@@ -50,9 +51,9 @@
 ##           package to your preamble.
 ## filename: an optional character giving the name of a file to save the table to
 
-mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
-                    model_names = NULL, custom_coef = NULL, caption,
-                    label = NULL, reorder_coef = NULL, sideways = F, filename) {
+mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test = 0,
+                    model_names = NULL, custom_coef = NULL, caption, label = NULL,
+                    reorder_coef = NULL, sideways = F, filename) {
   
   ## if only one model object, coerce to a list
   if (class(mod) != 'list') mod <- list(mod)
@@ -163,8 +164,9 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F,
   
   ## create LaTeX code
   tr <- texreg::texreg(l = tr_list, custom.model.names = model_names,
-                       caption = caption, label = label, sideways = sideways,
-                       reorder.coef = reorder_coef, use.packages = F)
+                       caption = caption, label = label, ci.test = ci_test,
+                       sideways = sideways, reorder.coef = reorder_coef,
+                       use.packages = F)
   ## replace confidence w/ credible or highest posterior density in texreg output
   if (hpdi == F) {
     
