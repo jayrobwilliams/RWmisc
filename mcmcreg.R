@@ -54,7 +54,8 @@
 mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test = 0,
                     model_names = NULL, custom_coef = NULL, gof = numeric(0),
                     gof_names = character(0), caption, label = NULL,
-                    reorder_coef = NULL, sideways = F, float_pos = '', filename) {
+                    reorder_coef = NULL, sideways = F, float_pos = '', filename,
+                    format = 'latex') {
   
   ## if only one model object, coerce to a list
   if (class(mod) != 'list') mod <- list(mod)
@@ -171,39 +172,143 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test =
                                                            gof.names = z),
                     coef_names, samps_pe, samps_ci, gof, gof_names)
   
-  ## create LaTeX code
-  tr <- texreg::texreg(l = tr_list, custom.model.names = model_names,
-                       caption = caption, label = label, ci.test = ci_test,
-                       sideways = sideways, reorder.coef = reorder_coef,
-                       float.pos = float_pos, use.packages = F)
-  ## replace confidence w/ credible or highest posterior density in texreg output
-  if (hpdi == F) {
+  ## create LaTeX output
+  if (format == 'latex') {
     
-    tr <- sub('outside the confidence interval',
-              paste('outside ', ci * 100 ,'\\\\% credible interval', sep = ''),
-              tr)
+    ## create LaTeX code
+    tr <- texreg::texreg(l = tr_list, custom.model.names = model_names,
+                         caption = caption, label = label, ci.test = ci_test,
+                         sideways = sideways, reorder.coef = reorder_coef,
+                         float.pos = float_pos, use.packages = F)
     
-  } else {
+    ## replace confidence w/ credible or highest posterior density in texreg output
+    if (hpdi == F) {
+      
+      tr <- sub('outside the confidence interval',
+                paste('outside ', ci * 100 ,'\\\\% credible interval', sep = ''),
+                tr)
+      
+    } else {
+      
+      tr <- sub('outside the confidence interval',
+                paste('outside ', ci * 100 ,'\\\\% highest posterior density interval',
+                      sep = ''), tr)
+      
+    }
     
-    tr <- sub('outside the confidence interval',
-              paste('outside ', ci * 100 ,'\\\\% highest posterior density interval',
-                    sep = ''), tr)
+    ## return LaTeX code to console or write to file
+    if (missing(filename)) {
+      
+      tr
+      
+    } else {
+      
+      ## remove newline at start of LaTeX code
+      tr <- sub('^\\n', '', tr)
+      
+      tex_file <- file(paste(filename, 'tex', sep = '.'))
+      writeLines(tr, tex_file, sep = '')
+      close(tex_file)
+      
+    }
     
   }
   
-  ## return LaTeX code to console or write to file
-  if (missing(filename)) {
+  ## create HTML output
+  if (format == 'html') {
     
-    tr
+    hr <- texreg::htmlreg(l = tr_list, custom.model.names = model_names,
+                          caption = caption, ci.test = ci_test,
+                          reorder.coef = reorder_coef)
     
-  } else {
+    ## replace confidence w/ credible or highest posterior density in texreg output
+    if (hpdi == F) {
+      
+      hr <- sub('outside the confidence interval',
+                paste('outside ', ci * 100, '% credible interval', sep = ''),
+                hr)
+      
+    } else {
+      
+      tr <- sub('outside the confidence interval',
+                paste('outside ', ci * 100, '% highest posterior density interval',
+                      sep = ''), hr)
+      
+    }
     
-    ## remove newline at start of LaTeX code
-    tr <- sub('^\\n', '', tr)
+    ## return html code to console or write to file
+    if (missing(filename)) {
+      
+      hr
+      
+    } else {
+      
+      hmtl_file <- file(paste(filename, 'html', sep = '.'))
+      writeLines(hr, html_file, sep = '')
+      close(html_file)
+      
+    }
     
-    tex_file <- file(paste(filename, 'tex', sep = '.'))
-    writeLines(tr, tex_file, sep = '')
-    close(tex_file)
+  }
+  
+  ## create HTML output
+  if (format == 'html') {
+    
+    
+    if (missing(filename)) {
+      
+      ## create table w/o html document tags
+      hr <- texreg::htmlreg(l = tr_list, custom.model.names = model_names,
+                            caption = caption, ci.test = ci_test,
+                            reorder.coef = reorder_coef, doctype = F,
+                            html.tag = F, head.tag = F, body.tag = F)
+      
+      ## replace confidence w/ credible or highest posterior density in texreg output
+      if (hpdi == F) {
+        
+        hr <- sub('outside the confidence interval',
+                  paste('outside ', ci * 100, '% credible interval', sep = ''),
+                  hr)
+        
+      } else {
+        
+        hr <- sub('outside the confidence interval',
+                  paste('outside ', ci * 100, '% highest posterior density interval',
+                        sep = ''), hr)
+        
+      }
+      
+      ## return html code to console or knitr
+      hr
+      
+    } else {
+      
+      ## create table w/o html document tags
+      hr <- texreg::htmlreg(l = tr_list, custom.model.names = model_names,
+                            caption = caption, ci.test = ci_test,
+                            reorder.coef = reorder_coef)
+      
+      ## replace confidence w/ credible or highest posterior density in texreg output
+      if (hpdi == F) {
+        
+        hr <- sub('outside the confidence interval',
+                  paste('outside ', ci * 100, '% credible interval', sep = ''),
+                  hr)
+        
+      } else {
+        
+        hr <- sub('outside the confidence interval',
+                  paste('outside ', ci * 100, '% highest posterior density interval',
+                        sep = ''), hr)
+        
+      }
+      
+      ## write table to html file
+      hmtl_file <- file(paste(filename, 'html', sep = '.'))
+      writeLines(hr, html_file, sep = '')
+      close(html_file)
+      
+    }
     
   }
   
