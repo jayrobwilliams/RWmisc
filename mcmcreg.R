@@ -52,14 +52,21 @@
 ## filename: an optional character giving the name of a file to save the table to
 
 mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test = 0,
-                    model_names = NULL, custom_coef = NULL, caption, label = NULL,
-                    reorder_coef = NULL, sideways = F, filename) {
+                    model_names = NULL, custom_coef = NULL, gof = numeric(0),
+                    gof_names = character(0), caption, label = NULL,
+                    reorder_coef = NULL, sideways = F, float_pos = '', filename) {
   
   ## if only one model object, coerce to a list
   if (class(mod) != 'list') mod <- list(mod)
   
   ## if only one parameter vector, coerce to a list
   if (class(pars) != 'list') pars <- list(pars)
+  
+  ## if only one gof statistic scalar or vector, coerce to a list
+  if (class(gof) != 'list') gof <- list(gof)
+  
+  ## if only one gof statistic name scalar or vector, coerce to a list
+  if (class(gof_names) != 'list') gof_names <- list(gof_names)
   
   ## if no caption, assign default
   if (missing(caption) & length(mod) > 1) caption <- 'Statistical Models'
@@ -156,17 +163,19 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test =
   }
   
   ## create list of texreg object(s) with point estimates and interval
-  tr_list <- mapply(function(x, y, z) texreg::createTexreg(coef.names = x,
-                                                           coef = y,
-                                                           ci.low = z[1, ],
-                                                           ci.up = z[2, ]),
-                    coef_names, samps_pe, samps_ci)
+  tr_list <- mapply(function(v, w, x, y, z) texreg::createTexreg(coef.names = v,
+                                                           coef = w,
+                                                           ci.low = x[1, ],
+                                                           ci.up = x[2, ],
+                                                           gof = y,
+                                                           gof.names = z),
+                    coef_names, samps_pe, samps_ci, gof, gof_names)
   
   ## create LaTeX code
   tr <- texreg::texreg(l = tr_list, custom.model.names = model_names,
                        caption = caption, label = label, ci.test = ci_test,
                        sideways = sideways, reorder.coef = reorder_coef,
-                       use.packages = F)
+                       float.pos = float_pos, use.packages = F)
   ## replace confidence w/ credible or highest posterior density in texreg output
   if (hpdi == F) {
     
