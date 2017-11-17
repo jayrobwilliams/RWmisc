@@ -199,7 +199,7 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test =
     ## return LaTeX code to console or write to file
     if (missing(filename)) {
       
-      tr
+      return(tr)
       
     } else {
       
@@ -239,71 +239,10 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test =
     ## return html code to console or write to file
     if (missing(filename)) {
       
-      hr
+      return(hr)
       
     } else {
       
-      hmtl_file <- file(paste(filename, 'html', sep = '.'))
-      writeLines(hr, html_file, sep = '')
-      close(html_file)
-      
-    }
-    
-  }
-  
-  ## create HTML output
-  if (format == 'html') {
-    
-    
-    if (missing(filename)) {
-      
-      ## create table w/o html document tags
-      hr <- texreg::htmlreg(l = tr_list, custom.model.names = model_names,
-                            caption = caption, ci.test = ci_test,
-                            reorder.coef = reorder_coef, doctype = F,
-                            html.tag = F, head.tag = F, body.tag = F)
-      
-      ## replace confidence w/ credible or highest posterior density in texreg output
-      if (hpdi == F) {
-        
-        hr <- sub('outside the confidence interval',
-                  paste('outside ', ci * 100, '% credible interval', sep = ''),
-                  hr)
-        
-      } else {
-        
-        hr <- sub('outside the confidence interval',
-                  paste('outside ', ci * 100, '% highest posterior density interval',
-                        sep = ''), hr)
-        
-      }
-      
-      ## return html code to console or knitr
-      hr
-      
-    } else {
-      
-      ## create table w/o html document tags
-      hr <- texreg::htmlreg(l = tr_list, custom.model.names = model_names,
-                            caption = caption, ci.test = ci_test,
-                            reorder.coef = reorder_coef)
-      
-      ## replace confidence w/ credible or highest posterior density in texreg output
-      if (hpdi == F) {
-        
-        hr <- sub('outside the confidence interval',
-                  paste('outside ', ci * 100, '% credible interval', sep = ''),
-                  hr)
-        
-      } else {
-        
-        hr <- sub('outside the confidence interval',
-                  paste('outside ', ci * 100, '% highest posterior density interval',
-                        sep = ''), hr)
-        
-      }
-      
-      ## write table to html file
       hmtl_file <- file(paste(filename, 'html', sep = '.'))
       writeLines(hr, html_file, sep = '')
       close(html_file)
