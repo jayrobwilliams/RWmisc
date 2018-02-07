@@ -42,6 +42,7 @@
 ##              of names in each list element must match the number of parameters.
 ##              if not supplied, the function will use the parameter names in the
 ##              model object(s).
+## gof: a named list of goodness of fit statistics, or a list of such lists
 ## caption: an optional caption for the table.
 ## label: an optional label for the table.
 ## reorder_coef: an optional vector reordering the coefficients in the final
@@ -64,7 +65,7 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test =
   if (class(pars) != 'list') pars <- list(pars)
   
   ## if only one gof statistic scalar or vector, coerce to a list
-  if (class(gof) != 'list') gof <- list(gof)
+  if (class(gof) != 'list') gof <- list(rep(gof, times = length(mod)))
   
   ## if only one gof statistic name scalar or vector, coerce to a list
   if (class(gof_names) != 'list') gof_names <- list(gof_names)
