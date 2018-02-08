@@ -20,23 +20,30 @@
 ##            estimates in the table.
 ## seq: a numeric with the number of values to use to generate the marginal
 ##      effects plot
+## plot: logical indicating whether to return the plot or the underlying dataframe
 
-mcmcme <- function(mod, main, int, moderator, point_est = 'mean', seq = 100) {
+mcmcme <- function(mod, main, int, moderator, point_est = 'mean', seq = 100,
+                   ci_level = .95, plot = T) {
   
   ## coefficients for independent and interactive effect
-  coefs <- summary(mod, pars = c(main, int),
-                   probs = c(.5 - ci_level/2, .5,
-                             .5 + ci_level/2))$summary[, c(1, 4:6)]
+  samps <- extract(groups_int_fig, pars = c(main, int))
   
   ## expand moderating variable to range of values
   mod_range <- seq(min(moderator), max(moderator), length.out = seq)
   
-  ## calculate marginal effect for mean, median, and credible interval
-  marg <- t(coefs[1, ] + coefs[2, ] %o% mod_range)
+  ## compute marginal effect for each sample
+  marg <- rep(samps[[1]], seq) + samps[[2]] %o% mod_range
+  
+  ## calculate marginal effect for mean
+  marg_mean <- apply(marg, 2, mean)
+  
+  ## calculate marginal effect for median and ci
+  marg_med <- t(apply(marg, 2, quantile, probs = c(.5 - ci_level/2, .5,
+                                                   .5 + ci_level/2)))
   
   ## create dataframe for plotting
-  marg_gg <- data.frame(mod = mod_range, mean = marg[, 1], median = marg[, 3],
-                        lo = marg[, 2], hi = marg[, 4])
+  marg_gg <- data.frame(mod = mod_range, mean = marg_mean, median = marg_med[, 2],
+                        lo = marg_med[, 1], hi = marg_med[, 3])
   
   ## use mean for point estimate
   if (point_est == 'mean') {
@@ -59,6 +66,6 @@ mcmcme <- function(mod, main, int, moderator, point_est = 'mean', seq = 100) {
   }
   
   ## return plot
-  mep
+  if (plot == T) mep else marg_gg
   
 }
