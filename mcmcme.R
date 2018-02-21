@@ -26,7 +26,7 @@ mcmcme <- function(mod, main, int, moderator, point_est = 'mean', seq = 100,
                    ci_level = .95, plot = T) {
   
   ## coefficients for independent and interactive effect
-  samps <- extract(groups_int_fig, pars = c(main, int))
+  samps <- rstan::extract(mod, pars = c(main, int))
   
   ## expand moderating variable to range of values
   mod_range <- seq(min(moderator), max(moderator), length.out = seq)
