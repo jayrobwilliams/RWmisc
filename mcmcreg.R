@@ -54,9 +54,9 @@
 
 mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test = 0,
                     model_names = NULL, custom_coef = NULL, gof = numeric(0),
-                    gof_names = character(0), caption, label = NULL,
-                    reorder_coef = NULL, sideways = F, float_pos = '', filename,
-                    format = 'latex') {
+                    gof_names = character(0), caption, label = NULL, groups = NULL,
+                    reorder_coef = NULL, coef_map = NULL, sideways = F, float_pos = '',
+                    filename, format = 'latex', scalebox = NULL) {
   
   ## if only one model object, coerce to a list
   if (class(mod) != 'list') mod <- list(mod)
@@ -180,7 +180,9 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test =
     tr <- texreg::texreg(l = tr_list, custom.model.names = model_names,
                          caption = caption, label = label, ci.test = ci_test,
                          sideways = sideways, reorder.coef = reorder_coef,
-                         float.pos = float_pos, use.packages = F)
+                         custom.coef.map = coef_map, groups = groups,
+                         scalebox = scalebox, float.pos = float_pos,
+                         use.packages = F)
     
     ## replace confidence w/ credible or highest posterior density in texreg output
     if (hpdi == F) {
@@ -220,7 +222,8 @@ mcmcreg <- function(mod, pars, point_est = 'mean', ci = .95, hpdi = F, ci_test =
     
     hr <- texreg::htmlreg(l = tr_list, custom.model.names = model_names,
                           caption = caption, ci.test = ci_test,
-                          reorder.coef = reorder_coef)
+                          reorder.coef = reorder_coef, custom.coef.map = coef_map,
+                          groups = groups)
     
     ## replace confidence w/ credible or highest posterior density in texreg output
     if (hpdi == F) {
