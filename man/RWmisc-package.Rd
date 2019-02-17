@@ -4,13 +4,13 @@
 \name{RWmisc-package}
 \alias{RWmisc}
 \alias{RWmisc-package}
-\title{RWmisc: Williams Miscellaneous}
+\title{RWmisc: Rob Williams Miscellaneous}
 \description{
 Contains functions for presenting results from MCMC
-	estimation of Bayesian model including tables and plots.
-	Also contains convenience functions for working with
-	spatial data across multiple UTM zones and recoding
-	data commonly used in international relations.
+    estimation of Bayesian model including tables and plots.
+    Also contains convenience functions for working with
+    spatial data across multiple UTM zones and recoding
+    data commonly used in international relations.
 }
 \details{
 Convenience functions for presenting MCMC output of Bayesian estimation and working with spatial data.
