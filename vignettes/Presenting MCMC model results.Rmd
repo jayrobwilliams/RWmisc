@@ -1,0 +1,141 @@
+---
+title: "Presenting MCMC model results"
+author: "Rob Williams"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  cache = T
+)
+library(RWmisc)
+library(rstan)
+library(brms)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+```
+
+You can use `mcmcreg()` to create formatted regression tables from many different types of MCMC output. Currently, `mcmcreg()` supports `stanfit`, `brmsfit`, `runjags`, `mcmc.list` and `mcmc` objects. Calling `mcmcreg()` on an MCMC model object will produce a formatted regression table. The basic syntax of `mcmcreg()` requires two main arguments: `mod` and `pars`.
+
+- `mod` is an MCMC model object, or list of such objects (all of the same type)
+- `pars` is a scalar or vector of parameter names, or a list of such names
+
+If `mod` is of the Stan family (e.g. `stan`, `rstanarm`, `brms`), then `pars` is used to extract parameters using the `stanfit@model_pars` slot, so all elements of each parameter family will be included. If `mod` is not of the Stan family, then `pars` should be a vector containing the name of every parameter you wish to extract. This may require you to use a statement such as :`pars = paste0('b[1', 1:5, ']')` if you have a model of class `runjags` with a parameter `b` with five elements.
+
+# Examples
+
+The rest of this vignette demonstrates the use of `mcmcreg()` with both `rstan` and `brms`. Functionality is similar for other MCMC model objects, and package specific ideosyncracies are noted in the documentation. Note that all regression tables in these examples use the `format = 'html'` argument as this vignette is an HTML document. Simply omit the `format` argument for $\LaTeX$ tables. If using in an R Markdown document, be sure to set `results = 'asis'` in the chunk options for the table to render correctly.
+
+## `rstan` examples
+
+```{r, message = F, warning = F, results = 'hide'}
+library(rstan)
+
+# save model
+cat('data {
+  int<lower=0> N; // number of observations
+  int<lower=0> K; // number of predictors (p + 1)
+  real y[N]; // response variable
+  matrix[N,K] X; // design matrix
+}
+parameters {
+  vector[K] beta; // regression coefficeients
+  real<lower=0.001> sigma; // error
+}
+model {
+  beta ~ normal(0, 5); // prior on coefficients
+  sigma ~ gamma(7.5, 10); // prior on error
+  y ~ normal(X * beta, sigma); // response variable
+}
+', file = 'lm.stan')
+
+# compile model
+mod <- stan_model('lm.stan')
+
+# design matrices
+X1 <- model.matrix(mpg ~ disp + am, data = mtcars)
+X2 <- model.matrix(mpg ~ disp + hp + as.factor(cyl), data = mtcars)
+
+# draw samples
+fit1 <- sampling(mod, data = list(N = nrow(mtcars), K = ncol(X1), y = mtcars$mpg, X = X1))
+fit2 <- sampling(mod, data = list(N = nrow(mtcars), K = ncol(X2), y = mtcars$mpg, X = X2))
+```
+
+Calling `mcmcreg()` on a `stanfit` object with only the `pars` argument supplied will produce a basic regression table. 
+
+```{r, results = 'asis'}
+mcmcreg(fit1, pars = 'beta', format = 'html', doctype = F)
+```
+
+You can pass standard `texreg()` arguments via the `...` argument. In this example, I rename the coefficients for more professional presentation.
+
+```{r, results = 'asis'}
+mcmcreg(fit1, pars = 'beta',
+        custom.coef.names = c('(Intercept)', 'Displacement', 'Automatic'),
+        format = 'html', doctype = F)
+```
+
+If creating a table with more than one model, it is best to first rename the coefficients within the model object to avoid confusion. In this example, $\beta_0$ and $\beta_1$ are the same in both models (the intercept and `disp`, respectively), but $beta_2$ is `am` in `fit1` and `hp` in `fit2`. The code and table below illustrate this problem. Note that even using `custom.coef.names` or `custom.coef.map` will not solve this problem as `texreg()` will treat both instances of `beta[2]` as identical due to their shared name.
+
+```{r, results = 'asis'}
+mcmcreg(list(fit1, fit2), pars = 'beta',
+        format = 'html', doctype = F)
+```
+
+The code below illustrates how renaming parameters in the `stanfit` object avoids this problem.
+
+```{r, results = 'asis'}
+names(fit1)[grep('beta', names(fit1))] <- colnames(X1)
+names(fit2)[grep('beta', names(fit2))] <- colnames(X2)
+mcmcreg(list(fit1, fit2), pars = 'beta',
+        format = 'html', doctype = F)
+```
+
+## `brms` examples
+
+One advantage of `brms` is that the elements of parameter vectors are informatively named, so you do not need to rename parameters in `brmsfit` objects. One downside is that the intercept is a separate parameter so you need to supply two parameter family names in your call to `pars`.
+
+```{r, results = 'hide'}
+library(brms)
+fit1 <- brm(mpg ~ cyl + disp + hp, data = mtcars, family = gaussian())
+```
+
+The default parameter names that `brm()` uses are `b_Intercept`, and `b`, so we include both in our `pars` argument.
+
+```{r, results = 'asis'}
+mcmcreg(fit1, pars = c('b_Intercept', 'b'),
+        format = 'html', doctype = F)
+```
+
+You can pass any standard `texreg` arguments not already defined in `mcmcreg`, such as the `custom.coef.map` argument that I use here to rename and reorder the parameters.
+
+```{r, results = 'asis'}
+mcmcreg(fit1, pars = c('b_Intercept', 'b'),
+        custom.coef.map = list('b_cyl' = 'Cylinders',
+                               'b_disp' = 'Displacement',
+                               'b_hp' = 'Horsepower',
+                               'b_Intercept' = '(Constant)'),
+        format = 'html', doctype = F)
+```
+
+Support of `brms` extends to random effects models as well.
+
+```{r, results = 'hide'}
+fit2 <- brm(mpg ~ cyl + disp + hp + (1 | gear),
+            data = mtcars, family = gaussian())
+```
+
+`mcmcreg()` will automatically include any random effects in tables as well.
+
+```{r, results = 'asis'}
+mcmcreg(fit2, pars = c('b_Intercept', 'b'),
+        format = 'html', doctype = F)
+```
+
+If you wish to include other parameters from more complex `brms` models, simply identify the parameter family names by inspecting `brmsfit$fit@model_pars`.
