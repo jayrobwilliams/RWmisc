@@ -44,6 +44,14 @@
 #' in one model and income in another, and `texreg` would combine the two if you
 #' do not rename `beta[1]` to more informative names in the model objects.
 #'
+#' If `mod` is a `brmsfit` object or list of `brmsfit` objects, note that the
+#' default `brms` names for coefficients are `b_Intercept` and `b`, so both of
+#' these should be included in `par` if you wish to include the intercept in the
+#' table. `mcmcreg()` will automatically look for random effects parameters which
+#' `brms` labels with a leading `r_`. If you wish to include additional parameters
+#' from more complex `brms` models, you can identify them by inspecting
+#' `brmsfit$fit@model`.
+#'
 #' @return A formatted regression table in LaTeX or HTML format.
 #' @export
 #'
@@ -74,6 +82,25 @@ mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
 
     ## extract posterior samples from list of model objects
     samps <- mapply(function(x, y) as.data.frame(rstan::extract(x, pars = y)),
+                    mod, pars, SIMPLIFY = F)
+
+  }
+
+  ## extract samples and variable names from brmsfit object
+  if (lapply(mod, class)[[1]] == 'brmsfit') {
+
+    ## check for random effects parameters
+    mod_ranefs <- lapply(mod, function(x) x$fit@model_pars[grep('r_', x$fit@model_pars)])
+
+    ## concatenate random effects parameter names to pars
+    pars <- mapply(c, pars, mod_ranefs, SIMPLIFY = F)
+
+    ## extract coefficient names from list of model ojects
+    coef_names <- mapply(function(x, y) rownames(rstan::summary(x$fit, pars = y)$summary),
+                         mod, pars, SIMPLIFY = F)
+
+    ## extract posterior samples from list of model objects
+    samps <- mapply(function(x, y) as.data.frame(rstan::extract(x$fit, pars = y)),
                     mod, pars, SIMPLIFY = F)
 
   }
