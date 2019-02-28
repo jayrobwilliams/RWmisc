@@ -67,4 +67,30 @@ the parameters in the model objects to ensure that different parameters with the
 same subscript are not conflated by \code{texreg} e.g. \code{beta[1]} could represent age
 in one model and income in another, and \code{texreg} would combine the two if you
 do not rename \code{beta[1]} to more informative names in the model objects.
+
+If \code{mod} is a \code{brmsfit} object or list of \code{brmsfit} objects, note that the
+default \code{brms} names for coefficients are \code{b_Intercept} and \code{b}, so both of
+these should be included in \code{par} if you wish to include the intercept in the
+table. \code{mcmcreg()} will automatically look for random effects parameters which
+\code{brms} labels with a leading \code{r_}. If you wish to include additional parameters
+from more complex \code{brms} models, you can identify them by inspecting
+\code{brmsfit$fit@model_pars}.
+}
+\examples{
+# simple linear model
+fit1 <- brm(mpg ~ cyl + disp + hp, data = mtcars,
+            family = gaussian())
+mcmcreg(fit1, pars = c('b_Intercept', 'b'),
+custom.coef.map = list('b_cyl' = 'Cylinders',
+                       'b_disp' = 'Displacement',
+                       'b_hp' = 'Horsepower',
+                       'b_Intercept' = '(Constant)'))
+
+# random effects linear model
+fit2 <- brm(mpg ~ cyl + disp + hp + (1 | gear),
+            data = mtcars, family = gaussian())
+mcmcreg(fit2, pars = c('b_Intercept', 'b'))
+}
+\author{
+Rob Williams, \email{jayrobwilliams@gmail.com}
 }

@@ -50,12 +50,27 @@
 #' table. `mcmcreg()` will automatically look for random effects parameters which
 #' `brms` labels with a leading `r_`. If you wish to include additional parameters
 #' from more complex `brms` models, you can identify them by inspecting
-#' `brmsfit$fit@model`.
+#' `brmsfit$fit@model_pars`.
 #'
 #' @return A formatted regression table in LaTeX or HTML format.
 #' @export
 #'
+#' @author Rob Williams, \email{jayrobwilliams@@gmail.com}
+#'
 #' @examples
+#' # simple linear model
+#' fit1 <- brm(mpg ~ cyl + disp + hp, data = mtcars,
+#'             family = gaussian())
+#' mcmcreg(fit1, pars = c('b_Intercept', 'b'),
+#' custom.coef.map = list('b_cyl' = 'Cylinders',
+#'                        'b_disp' = 'Displacement',
+#'                        'b_hp' = 'Horsepower',
+#'                        'b_Intercept' = '(Constant)'))
+#'
+#' # random effects linear model
+#' fit2 <- brm(mpg ~ cyl + disp + hp + (1 | gear),
+#'             data = mtcars, family = gaussian())
+#' mcmcreg(fit2, pars = c('b_Intercept', 'b'))
 mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
                     custom.coef.names = NULL, gof = numeric(0),
                     custom.gof.names = character(0),
@@ -63,6 +78,9 @@ mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
 
   ## if only one model object, coerce to a list
   if (class(mod) != 'list') mod <- list(mod)
+
+  ## if only one custom coefficient names object, coerce to a list
+  if (class(custom.coef.names) != 'list' & !is.null(custom.coef.names)) custom.coef.names <- list(custom.coef.names)
 
   ## if only one parameter vector, coerce to a list
   if (class(pars) != 'list') pars <- list(pars)
