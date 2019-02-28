@@ -3,26 +3,30 @@ Type: Package
 Title: Rob Williams Miscellaneous
 Date: 2019-02-13
 Version: 0.0.1
-Author: Rob Williams <jrw@live.unc.edu>
-Maintainer: Rob Williams <jrw@live.unc.edu>
+Author: Rob Williams <jayrobwilliams@gmail.com>
+Maintainer: Rob Williams <jayrobwilliams@gmail.com>
 Description: Contains functions for presenting results from MCMC
     estimation of Bayesian model including tables and plots.
     Also contains convenience functions for working with
     spatial data across multiple UTM zones and recoding
     data commonly used in international relations.
-Depends: 
+Depends:
     R (>= 3.4.0)
 Imports:
     ggplot2,
     texreg,
     rstan,
+    brms,
     runjags,
     coda
+Suggests: knitr,
+    rmarkdown
 Enhances: texreg
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/jayrobwilliams/RWmisc
 BugReports: https://github.com/jayrobwilliams/RWmisc/issues
+VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
