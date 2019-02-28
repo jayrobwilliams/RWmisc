@@ -22,5 +22,5 @@ devtools::install_github("jayrobwilliams/RWmisc")
 ## Examples
 
 See the [vignette on presenting MCMC model
-output](docs/Presenting_MCMC_model_results.html) for how to use the MCMC
-model function in this package.
+output](https://jayrobwilliams.github.io/RWmisc/articles/Presenting%20MCMC%20model%20results.html)
+for how to use the MCMC model function in this package.
