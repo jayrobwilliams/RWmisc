@@ -52,6 +52,8 @@
 #' from more complex `brms` models, you can identify them by inspecting
 #' `brmsfit$fit@model_pars`.
 #'
+#' @importFrom brms brm
+#'
 #' @return A formatted regression table in LaTeX or HTML format.
 #' @export
 #'

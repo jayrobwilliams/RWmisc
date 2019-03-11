@@ -17,7 +17,6 @@ Imports:
     texreg,
     rstan,
     brms,
-    runjags,
     coda
 Suggests: knitr,
     rmarkdown
