@@ -18,12 +18,25 @@
 #' @examples
 mcmccp <- function(mod, pars, ci, plot = T) {
 
-  require(ggplot2)
+  ## check for stanfit
+  if (inherits(mod, 'stanfit')) {
 
-  ## extract summary from model object
-  coefs <- data.frame(rstan::summary(mod, pars = pars,
-                                     probs = c(.5 - ci/2, .5,
-                                               .5 + ci/2))$summary[, c(1, 4:6)])
+    ## extract summary from model object
+    coefs <- data.frame(rstan::summary(mod, pars = pars,
+                                       probs = c(.5 - ci/2, .5,
+                                                 .5 + ci/2))$summary[, c(1, 4:6)])
+
+  }
+
+  ## check for brmsfit
+  if (inherits(mod, 'brmsfit')) {
+
+    ## extract summary from model object
+    coefs <- data.frame(rstan::summary(mod$fit, pars = pars,
+                                       probs = c(.5 - ci/2, .5,
+                                                 .5 + ci/2))$summary[, c(1, 4:6)])
+
+  }
 
   ## create variable of predictor name for plotting
   coefs$variable <- factor(rownames(coefs), levels = rownames(coefs))

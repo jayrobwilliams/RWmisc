@@ -94,7 +94,7 @@ mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
   if (class(custom.gof.names) != 'list') custom.gof.names <- list(custom.gof.names)
 
   ## extract samples and variable names from stanfit object
-  if (lapply(mod, class)[[1]] == 'stanfit') {
+  if (lapply(mod, inherits, 'stanfit')[[1]]) {
 
     ## extract coefficient names from list of model ojects
     coef_names <- mapply(function(x, y) rownames(rstan::summary(x, pars = y)$summary),
@@ -107,7 +107,7 @@ mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
   }
 
   ## extract samples and variable names from brmsfit object
-  if (lapply(mod, class)[[1]] == 'brmsfit') {
+  if (lapply(mod, inherits, 'brmsfit')[[1]]) {
 
     ## check for random effects parameters
     mod_ranefs <- lapply(mod, function(x) x$fit@model_pars[grep('r_', x$fit@model_pars)])
@@ -126,7 +126,7 @@ mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
   }
 
   ## extract samples and variable names from runjags object
-  if (lapply(mod, class)[[1]] == 'runjags') {
+  if (lapply(mod, inherits, 'runjags')[[1]]) {
 
     ## extract posterior samples from list of model objects
     samps <- mapply(function(x, y) runjags:::as.mcmc.list.runjags(x, vars = y),
@@ -141,7 +141,7 @@ mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
   }
 
   ## extract samples and variable names from mcmc.list object
-  if (lapply(mod, class)[[1]] == 'mcmc.list') {
+  if (lapply(mod, inherits, 'mcmc.list')[[1]]) {
 
     ## extract posterior samples from list of model objects
     samps <- lapply(mod, function(x) as.data.frame(Reduce("+", x) / length(x)))
@@ -156,7 +156,7 @@ mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
   }
 
   ## extract samples and variable names from mcmc object
-  if (lapply(mod, class)[[1]] == 'mcmc') {
+  if (lapply(mod, inherits, 'mcmc')[[1]]) {
 
     ## extract posterior samples from list of model objects
     samps <- mapply(function(x) coda:::as.data.frame.mcmc(x, vars = y),
