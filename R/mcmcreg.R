@@ -19,6 +19,8 @@
 #' @param ci a scalar indicating the confidence level of the uncertainty intervals.
 #' @param hpdi a logical indicating whether to use highest posterior density intervals
 #' or equal tailed credible intervals to capture uncertainty.
+#' @param brms.re a logical indicating whether to include random effect estimates
+#' from `brms` models.
 #' @param custom.coef.names an optional vector or list of vectors containing parameter
 #' names for each model. If there are multiple models, the list must have the same
 #' number of elements as there are models, and the vector of names in each list
@@ -36,7 +38,7 @@
 #' @param format a character indicating `latex` or `html` output.
 #' @param file optional file name to write table to file instead of printing to
 #' console.
-#' @param ... optional argumens to `texreg`.
+#' @param ... optional arguments to `texreg`.
 #'
 #' @details If using `custom.coef.map` with more than one model, you should rename
 #' the parameters in the model objects to ensure that different parameters with the
@@ -74,12 +76,12 @@
 #'             data = mtcars, family = gaussian())
 #' mcmcreg(fit2, pars = c('b_Intercept', 'b'))
 mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
-                    custom.coef.names = NULL, gof = numeric(0),
+                    brms.re = F, custom.coef.names = NULL, gof = numeric(0),
                     custom.gof.names = character(0),
                     format = 'latex', file, ...) {
 
   ## if only one model object, coerce to a list
-  if (class(mod) != 'list') mod <- list(mod)
+  if (all(class(mod) != 'list')) mod <- list(mod)
 
   ## if only one custom coefficient names object, coerce to a list
   if (class(custom.coef.names) != 'list' & !is.null(custom.coef.names)) custom.coef.names <- list(custom.coef.names)
@@ -113,7 +115,7 @@ mcmcreg <- function(mod, pars, point.est = 'mean', ci = .95, hpdi = F,
     mod_ranefs <- lapply(mod, function(x) x$fit@model_pars[grep('r_', x$fit@model_pars)])
 
     ## concatenate random effects parameter names to pars
-    pars <- mapply(c, pars, mod_ranefs, SIMPLIFY = F)
+    if (brms.re) pars <- mapply(c, pars, mod_ranefs, SIMPLIFY = F)
 
     ## extract coefficient names from list of model ojects
     coef_names <- mapply(function(x, y) rownames(rstan::summary(x$fit, pars = y)$summary),

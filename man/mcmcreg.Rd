@@ -5,7 +5,7 @@
 \title{Regression Tables for MCMC Output}
 \usage{
 mcmcreg(mod, pars, point.est = "mean", ci = 0.95, hpdi = F,
-  custom.coef.names = NULL, gof = numeric(0),
+  brms.re = F, custom.coef.names = NULL, gof = numeric(0),
   custom.gof.names = character(0), format = "latex", file, ...)
 }
 \arguments{
@@ -31,6 +31,9 @@ point estimates in the table.}
 \item{hpdi}{a logical indicating whether to use highest posterior density intervals
 or equal tailed credible intervals to capture uncertainty.}
 
+\item{brms.re}{a logical indicating whether to include random effect estimates
+from \code{brms} models.}
+
 \item{custom.coef.names}{an optional vector or list of vectors containing parameter
 names for each model. If there are multiple models, the list must have the same
 number of elements as there are models, and the vector of names in each list
@@ -53,7 +56,7 @@ of fit statistics.}
 \item{file}{optional file name to write table to file instead of printing to
 console.}
 
-\item{...}{optional argumens to \code{texreg}.}
+\item{...}{optional arguments to \code{texreg}.}
 }
 \value{
 A formatted regression table in LaTeX or HTML format.
