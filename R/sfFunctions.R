@@ -1,27 +1,3 @@
-#' Simplefeature Downgrade
-#'
-#' Downgrade a Simplefeature Geometry Object to a DataFrame.
-#'
-#' @param x A simplefeature object.
-#'
-#' @import sf
-#'
-#' @return A DataFrame.
-#' @export
-#'
-#' @examples
-st_drop_geometry <- function(x) {
-
-  if (inherits(x, 'sf')) {
-
-    x <- st_set_geometry(x, NULL)
-    class(x) <- 'data.frame'
-
-  }
-
-  return(x)
-}
-
 #' UTM Convenience Functions
 #'
 #' Functions for converting latitude-longitude data to UTM.
