@@ -10,7 +10,7 @@ theme_rw()
 A ggplot theme with no grid elements or gray background.
 }
 \examples{
-ggplot(mtcars, aes(x = hp, y = mpg)) +
-geom_point() +
+ggplot2::ggplot(mtcars, ggplot2::aes(x = hp, y = mpg)) +
+ggplot2::geom_point() +
 theme_rw()
 }
