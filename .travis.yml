@@ -1,40 +1,35 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+test: &test
+  stage: Test
+  language: r
+  dist:xenial
+  cache: packages
+  before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
+  addons:
+    apt:
+      packages:
+        - libudunits2-dev
+        - libproj-dev
+        - libgeos-dev
+        - libgdal-dev
+        - libpoppler-cpp-dev
 
-language: r
-
-r:
-  - oldrel
-  - release
-  - devel
-
-cache: packages
-
-before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
-
-dist: xenial
-
-# install sf system dependencies
-addons:
-  apt:
-    packages:
-      - libudunits2-dev
-      - libproj-dev
-      - libgeos-dev
-      - libgdal-dev
-      - libpoppler-cpp-dev
-
-# for codecov
-r_packages:
-  - covr
-
-# only report coverage after build is successful
-after_success:
-  - Rscript -e 'covr::codecov()'
-
-# deploy package site built via pkgdown
 jobs:
   include:
-    - stage: deploy
-      provider: script
-      script: Rscript -e 'pkgdown::deploy_site_github()'
-      skip_cleanup: true
+    - <<: *test
+      r:
+        - oldrel
+    - <<: *test
+      r:
+        - devel
+    - <<: *test
+      r:
+        - release
+      r_packages:
+        - covr
+      after_success:
+        - Rscript -e 'covr::codecov()'
+      deploy:
+        provider: script
+        script: Rscript -e 'pkgdown::deploy_site_github()'
+        skip_cleanup: true
