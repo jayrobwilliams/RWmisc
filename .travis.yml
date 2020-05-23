@@ -13,6 +13,7 @@ before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
 
 dist: xenial
 
+# install sf system dependencies
 addons:
   apt:
     packages:
@@ -22,6 +23,15 @@ addons:
       - libgdal-dev
       - libpoppler-cpp-dev
 
+# for codecov
+r_packages:
+  - covr
+
+# only report coverage after build is successful
+after_success:
+  - Rscript -e 'covr::codecov()'
+
+# deploy package site built via pkgdown
 deploy:
     provider: script
     script: Rscript -e 'pkgdown::deploy_site_github()'
