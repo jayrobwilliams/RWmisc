@@ -5,6 +5,7 @@
 
 [![Travis build
 status](https://travis-ci.org/jayrobwilliams/RWmisc.svg?branch=master)](https://travis-ci.org/jayrobwilliams/RWmisc)
+[![codecov](https://codecov.io/gh/jayrobwilliams/RWmisc/branch/master/graph/badge.svg)](https://codecov.io/gh/jayrobwilliams/RWmisc)
 <!-- badges: end -->
 
 # RWmisc
