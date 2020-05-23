@@ -1,4 +1,4 @@
 #' @details
-#' Convenience functions for presenting MCMC output of Bayesian estimation and working with spatial data.
+#' Convenience functions for working with spatial data and my workflow.
 #' @keywords internal
 "_PACKAGE"

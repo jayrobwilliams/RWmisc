@@ -11,7 +11,7 @@ Contains convenience functions for working with
     data commonly used in international relations.
 }
 \details{
-Convenience functions for presenting MCMC output of Bayesian estimation and working with spatial data.
+Convenience functions for working with spatial data and my workflow.
 }
 \seealso{
 Useful links:
@@ -19,6 +19,10 @@ Useful links:
   \item \url{https://github.com/jayrobwilliams/RWmisc}
   \item Report bugs at \url{https://github.com/jayrobwilliams/RWmisc/issues}
 }
+
+}
+\author{
+\strong{Maintainer}: Rob Williams \email{jayrobwilliams@gmail.com} (0000-0001-9259-3883)
 
 }
 \keyword{internal}
