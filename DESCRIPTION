@@ -3,8 +3,8 @@ Type: Package
 Title: Rob Williams Miscellaneous
 Date: 2019-02-13
 Version: 0.0.3
-Author: Rob Williams <jayrobwilliams@gmail.com>
-Maintainer: Rob Williams <jayrobwilliams@gmail.com>
+Authors@R: person("Rob", "Williams", email = "jayrobwilliams@gmail.com", 
+             role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9259-3883"))
 Description: Contains convenience functions for working with
     spatial data across multiple UTM zones and recoding
     data commonly used in international relations.
