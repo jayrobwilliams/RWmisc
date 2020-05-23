@@ -9,10 +9,13 @@
 #' @param point A simplefeatures object of class point.
 #' @param max Logical; return maximum or minimum distance?
 #'
+#' @import sf
+#'
 #' @return Maximum or minimum distance between a point and a polygon.
 #' @export
 #'
 #' @examples
+#' library(sf)
 #' polys <- st_sfc(st_polygon(list(rbind(c(0,0), c(0,1), c(1,1), c(1,0), c(0,0)))),
 #' crs = 4326)
 #' points <- st_sfc(st_multipoint(rbind(c(.25, .5), c(.75, .5))), crs = 4326)

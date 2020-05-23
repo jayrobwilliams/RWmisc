@@ -27,7 +27,6 @@
 #' @import sp
 #' @import sf
 #'
-#' @examples
 overlap.weight <- function(raster, polygons, count = F) {
 
   ## create list for raster from each polygon
