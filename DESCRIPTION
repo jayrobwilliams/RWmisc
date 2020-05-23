@@ -2,7 +2,7 @@ Package: RWmisc
 Type: Package
 Title: Rob Williams Miscellaneous
 Date: 2019-02-13
-Version: 0.0.2
+Version: 0.0.3
 Author: Rob Williams <jayrobwilliams@gmail.com>
 Maintainer: Rob Williams <jayrobwilliams@gmail.com>
 Description: Contains convenience functions for working with
