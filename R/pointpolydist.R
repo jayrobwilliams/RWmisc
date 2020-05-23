@@ -1,99 +1,9 @@
-#' UTM Convenience Functions
-#'
-#' Functions for converting latitude-longitude data to UTM.
-#'
-#' @name UTM.functions
-#' @aliases UTM.functions
-NULL
-
-long2UTM <- function(long) {
-
-  floor((long + 180) / 6) %% 60 + 1
-
-}
-
-#' @rdname UTM.functions
-#'
-#' @param long A vector of longitude values.
-#'
-#' @return UTM vector of zone numbers.
-#' @export
-#'
-#' @examples
-UTMzones <- function(long) {
-
-  unique(long2UTM(long))
-
-}
-
-chooseUTM <- function(long) {
-
-  zone <- round(mean(long2UTM(long)))
-
-  zone
-
-}
-
-#' @rdname UTM.functions
-#'
-#' @param sfo A simplefeature object in latitude-longitude CRS.
-#'
-#' @import sf
-#'
-#' @return A simplefeature object projected to UTM CRS.
-#' @export
-#'
-#' @examples
-projectUTM <- function(sfo) {
-
-  ## determine if spatial object is a SpatialPoints or SpatialPolygons object and use either
-  ## the coords or polygons slot to access the longitude(s) of the spatial object
-  if (attr(st_geometry(sfo), 'class')[1] == 'sfc_POINT') {
-
-    ## find average UTM zone using longitude(s) of SpatialPoints object
-    zone <- chooseUTM(st_coordinates(sfo)[1])
-
-    ## save latitude mean to determine if features falls in southern hemisphere
-    lat.mean <- mean(st_coordinates(sfo)[2])
-
-  }
-
-  if (attr(st_geometry(sfo), 'class')[1] == 'sfc_MULTIPOLYGON') {
-
-    ## find average UTM zone using longitude(s) of SpatialPolygons object
-    zone <- chooseUTM(mean(st_coordinates(sfo)[, 1]))
-
-    ## save latitude mean to determine if features falls in southern hemisphere
-    lat.mean <- mean(st_coordinates(sfo)[, 2])
-
-  }
-
-  ## if average of latitude values is negative, add +south the coordinate reference system
-  if (lat.mean >= 0) {
-
-    ## create coordinate reference system object to project spatial object
-    zone <- st_crs(paste('+proj=utm +zone=', zone, sep = ''))
-
-  } else {
-
-    ## create coordinate reference system object to project spatial object
-    zone <- st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
-
-  }
-
-  ## project spatial object
-  sfo <- st_transform(sfo, zone)
-
-  ## return projected spatial object
-  sfo
-
-}
-
-
 #' Point-Polygon Distances
 #'
 #' Calculate the maximum or minimum possible distance from a point to the edge
 #' of a given polygon.
+#'
+#' @name point.poly.dist
 #'
 #' @param poly A simplefeatures object of class polygon or multipolygon.
 #' @param point A simplefeatures object of class point.
@@ -103,6 +13,11 @@ projectUTM <- function(sfo) {
 #' @export
 #'
 #' @examples
+#' polys <- st_sfc(st_polygon(list(rbind(c(0,0), c(0,1), c(1,1), c(1,0), c(0,0)))),
+#' crs = 4326)
+#' points <- st_sfc(st_multipoint(rbind(c(.25, .5), c(.75, .5))), crs = 4326)
+#' point.poly.dist(points, polys)
+
 point.poly.dist <- function(poly, point, max = T) {
 
   ## project point using polygon CRS
