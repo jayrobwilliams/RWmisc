@@ -10,6 +10,8 @@
 #' @param count a logical indicating whether to return a raster with the count of
 #' polygons intersecting each cell, or a raster with original values weighted by
 #' 1/number of intersecting polygons.
+#' @param warn include warnings? Most common is that the returned raster will be
+#' an intersection of the raster and the polygons. Default `TRUE`.
 #'
 #' @details  This function takes a raster and a set of polygons as arguments.
 #' It counts the number of polygons that intersect each raster cell. It can
@@ -27,13 +29,35 @@
 #' @import sp
 #' @import sf
 #'
-overlap.weight <- function(raster, polygons, count = F) {
+#' @examples
+#' library(sf)
+#' library(raster)
+#' polys_t <- st_sfc(list(st_polygon(list(rbind(c(2,2), c(2,6),
+#'                                              c(6,6), c(6,2),
+#'                                              c(2, 2)))),
+#'                        st_polygon(list(rbind(c(8,8), c(4,8),
+#'                                              c(4,4), c(8,4),
+#'                                              c(8,8))))),
+#'                   crs = 4326)
+#' raster_t <- raster(nrows = 10, ncols = 10, xmn = 0,
+#'                    xmx = 10, ymn = 0, ymx = 10,
+#'                    vals = 1:100,
+#'                    crs = CRS(st_crs(polys_t)$proj4string))
+#' overlap.weight(raster_t, polys_t)
+
+overlap.weight <- function(raster, polygons, count = F, warn = T) {
 
   ## create list for raster from each polygon
   rasters <- list()
 
+  if (inherits(polygons, 'sfc_POLYGON')) {
+
+    polygons <- as_Spatial(polygons)
+
+  }
+
   ## loop through polygons
-  for (i in 1:nrow(polygons)) {
+  for (i in 1:length(polygons)) {
 
     ## get polygon j
     polygon <- polygons[i, ]
@@ -61,10 +85,14 @@ overlap.weight <- function(raster, polygons, count = F) {
   ## return raster of overlapping counts
   if (count) return(raster_poly_count)
 
-  ## divide by 1/polygon count
+  ## divide by polygon count
   raster_poly_count <- 1 / raster_poly_count
 
   ## return the weighted original raster
-  return(raster * raster_poly_count)
+  if (!warn) {
+    suppressWarnings(return(raster * raster_poly_count))
+  } else {
+    return(raster * raster_poly_count)
+    }
 
 }
