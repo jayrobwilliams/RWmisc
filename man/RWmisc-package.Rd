@@ -22,7 +22,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Rob Williams \email{jayrobwilliams@gmail.com} (0000-0001-9259-3883)
+\strong{Maintainer}: Rob Williams \email{jayrobwilliams@gmail.com} (\href{https://orcid.org/0000-0001-9259-3883}{ORCID})
 
 }
 \keyword{internal}
