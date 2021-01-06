@@ -65,6 +65,12 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          rm '/usr/local/bin/gfortran'
+          brew install geos gdal proj udunits
+
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
