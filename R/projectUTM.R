@@ -5,8 +5,6 @@
 #' @name projectUTM
 #' @param sfo A simplefeature object in latitude-longitude CRS.
 #'
-#' @import sf
-#'
 #' @return A simplefeature object projected to UTM CRS.
 #' @export
 #'
@@ -27,17 +25,17 @@ projectUTM <- function(sfo) {
   if (lat.mean >= 0) {
 
     ## create coordinate reference system object to project spatial object
-    zone <- st_crs(paste('+proj=utm +zone=', zone, sep = ''))
+    zone <- sf::st_crs(paste('+proj=utm +zone=', zone, sep = ''))
 
   } else {
 
     ## create coordinate reference system object to project spatial object
-    zone <- st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
+    zone <- sf::st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
 
   }
 
   ## project spatial object
-  sfo <- st_transform(sfo, zone)
+  sfo <- sf::st_transform(sfo, zone)
 
   ## return projected spatial object
   sfo
