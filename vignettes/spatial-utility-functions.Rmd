@@ -1,0 +1,99 @@
+---
+title: "Spatial Utility Functions"
+author: "Rob Williams"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Spatial Utility Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 3, 
+  fig.align = 'center'
+)
+```
+
+This package contains convenience functions for carrying out GIS operations
+that I have repeatedly encountered in my research.
+
+```{r setup, message = F, warning = F, results = 'hide'}
+library(sf)
+library(raster)
+library(RWmisc)
+```
+
+# Weighting raster values by overlapping polygons
+
+The `overlap.weight` function allows you to weight the values of a raster cell
+by the inverse of the number of polygons that overlap the cell. This is useful
+when, e.g., calculating the population of ethnic group settlement areas when
+different group settlement areas can overlap one another. The `count` argument
+allows the count of overlapping polygons to be returned instead of the weighted
+cell values. Note that this converts any cells not covered by at least one
+polygon to `NA`.
+
+```{r overlap-weight}
+## create three overlapping squares
+polys_t <- st_sfc(list(st_polygon(list(rbind(c(2,2), c(2,6), c(6,6),
+                                             c(6,2), c(2, 2)))),
+                       st_polygon(list(rbind(c(8,8), c(4,8), c(4,4),
+                                             c(8,4), c(8,8)))),
+                       st_polygon(list(rbind(c(3,3), c(3,7), c(7,7),
+                                             c(7,3), c(3,3))))),
+                  crs = 4326)
+
+## create raster
+raster_t <- raster(nrows = 6, ncols = 6, xmn = 2, xmx = 8, ymn = 2, ymx = 8,
+                   vals = 1:36, crs = CRS(st_crs(polys_t)$proj4string))
+
+## set plotting parameters
+par(mfrow = c(1, 3))
+
+## plot raw raster values
+plot(raster_t, main = 'raw')
+plot(polys_t, add = T)
+
+## plot count of overlapping polygons
+plot(overlap.weight(raster_t, polys_t, count = T), main = "count")
+plot(polys_t, add = T)
+
+## plot overlap-weighted raster values
+plot(overlap.weight(raster_t, polys_t), main = "weighted")
+plot(polys_t, add = T)
+```
+
+# Projecting spatial objects to UTM
+
+The `projectUTM` function converts any `sf` or `sfc` objects in longitude,
+latitude decimal degrees to the UTM zone where the majority of the data lie.
+This function accounts for North and South UTM zones as well.
+
+```{r projectUTM}
+## read in North Carolina shapefile
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+
+## transform crs to WGS84 and inspect CRS
+nc <- st_transform(nc, st_crs(4326))
+st_crs(nc)
+
+## project to UTM and inspect CRS
+st_crs(projectUTM(nc))
+```
+
+Projection of the North Carolina polygons can be further seen by plotting them.
+
+```{r projectUTM-plot}
+## set plotting parameters
+par(mfrow = c(1, 2), mar = rep(0, 4))
+
+## plot WGS84 and UTM projected North Carolina
+plot(nc$geometry)
+plot(projectUTM(nc)$geometry)
+```
+
