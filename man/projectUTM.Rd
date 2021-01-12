@@ -2,15 +2,24 @@
 % Please edit documentation in R/projectUTM.R
 \name{projectUTM}
 \alias{projectUTM}
+\alias{projectUTM.sf}
+\alias{projectUTM.SpatialPointsDataFrame}
+\alias{projectUTM.SpatialPolygonsDataFrame}
 \title{Project to UTM}
 \usage{
-projectUTM(sfo)
+projectUTM(x, ...)
+
+\method{projectUTM}{sf}(x)
+
+\method{projectUTM}{SpatialPointsDataFrame}(x)
+
+\method{projectUTM}{SpatialPolygonsDataFrame}(x)
 }
 \arguments{
-\item{sfo}{A simplefeature object in latitude-longitude CRS.}
+\item{x}{An \code{sf} or \code{sp} object in latitude-longitude CRS.}
 }
 \value{
-A simplefeature object projected to UTM CRS.
+An \code{sf} or \code{sp} object projected to UTM CRS.
 }
 \description{
 Project an object in latitude/longitude to UTM.
