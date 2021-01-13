@@ -22,7 +22,39 @@ projectUTM <- function(x) {
 #' @rdname projectUTM
 #'
 #' @export
-projectUTM.sf <- projectUTM.sfc <- function(x) {
+projectUTM.sf <- function(x) {
+
+  ## find average UTM zone using longitude(s) of sf object
+  zone <- chooseUTM(mean(st_coordinates(x)[, 1]))
+
+  ## save latitude mean to determine if majority of features fall in southern hemisphere
+  lat.mean <- mean(st_coordinates(x)[, 2])
+
+  ## if average of latitude values is negative, add +south the coordinate reference system
+  if (lat.mean >= 0) {
+
+    ## create coordinate reference system object to project spatial object
+    zone <- sf::st_crs(paste('+proj=utm +zone=', zone, sep = ''))
+
+  } else {
+
+    ## create coordinate reference system object to project spatial object
+    zone <- sf::st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
+
+  }
+
+  ## project spatial object
+  x <- sf::st_transform(x, zone)
+
+  ## return projected spatial object
+  x
+
+}
+
+#' @rdname projectUTM
+#'
+#' @export
+projectUTM.sfc <- function(x) {
 
   ## find average UTM zone using longitude(s) of sf object
   zone <- chooseUTM(mean(st_coordinates(x)[, 1]))

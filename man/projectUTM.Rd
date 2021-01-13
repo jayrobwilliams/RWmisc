@@ -3,6 +3,7 @@
 \name{projectUTM}
 \alias{projectUTM}
 \alias{projectUTM.sf}
+\alias{projectUTM.sfc}
 \alias{projectUTM.SpatialPointsDataFrame}
 \alias{projectUTM.SpatialPolygonsDataFrame}
 \title{Project to UTM}
@@ -10,6 +11,8 @@
 projectUTM(x)
 
 \method{projectUTM}{sf}(x)
+
+\method{projectUTM}{sfc}(x)
 
 \method{projectUTM}{SpatialPointsDataFrame}(x)
 
