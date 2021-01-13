@@ -91,7 +91,7 @@
 
     
     
-<p>This package contains convenience functions for carrying out GIS operations that I have repeatedly encountered in my research.</p>
+<p>This package contains convenience functions for carrying out GIS operations that I have repeatedly encountered in my research. The following packages are used in this vignette:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster">raster</a></span><span class="op">)</span>
@@ -220,6 +220,61 @@
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/projectUTM.html">projectUTM</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span></code></pre></div>
 <p><img src="spatial-utility-functions_files/figure-html/projectUTM-plot-1.png" width="672" style="display: block; margin: auto;"></p>
+</div>
+<div id="maximum-and-minimum-distance-from-points-to-a-polygon" class="section level1">
+<h1 class="hasAnchor">
+<a href="#maximum-and-minimum-distance-from-points-to-a-polygon" class="anchor"></a>Maximum and minimum distance from point(s) to a polygon</h1>
+<p>The <code>point.poly.dist</code> function computes the maximum or minimum distance from a point or set of points to a polygon. It correctly calculates distances for both geographic and projected data.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## create north carolina centroids</span>
+<span class="va">nc_centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
+<span class="co">#&gt; Warning in st_centroid.sf(nc): st_centroid assumes attributes are constant over</span>
+<span class="co">#&gt; geometries of x</span>
+<span class="co">#&gt; Warning in st_centroid.sfc(st_geometry(x), of_largest_polygon =</span>
+<span class="co">#&gt; of_largest_polygon): st_centroid does not give correct centroids for longitude/</span>
+<span class="co">#&gt; latitude data</span>
+
+<span class="co">## calculate maximum distance</span>
+<span class="fu"><a href="../reference/point.poly.dist.html">point.poly.dist</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, max <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+<span class="co">#&gt; [1] 33561.23</span></code></pre></div>
+<p>The following illustration depicts the line connecting the centroid of the polygon to the farthest point on the polygon (red) and the nearest point on the polygon (blue).</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nc_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="st">'POINT'</span><span class="op">)</span>
+
+<span class="va">farthest_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc_points</span>, <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/raster/man/which.minmax.html">which.max</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">farthest_point</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">nc_points</span><span class="op">[</span><span class="va">farthest_ind</span>,<span class="op">]</span><span class="op">)</span>,
+                        <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">nearest_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc_points</span>, <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/raster/man/which.minmax.html">which.min</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">nearest_point</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">nc_points</span><span class="op">[</span><span class="va">nearest_ind</span>,<span class="op">]</span><span class="op">)</span>,
+                        <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="co">## plot</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, add <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">farthest_point</span>, add <span class="op">=</span> <span class="cn">T</span>, col <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nearest_point</span>, add <span class="op">=</span> <span class="cn">T</span>, col <span class="op">=</span> <span class="st">'blue'</span><span class="op">)</span></code></pre></div>
+<p><img src="spatial-utility-functions_files/figure-html/point-poly-dist-illus-1.png" width="672" style="display: block; margin: auto;"></p>
+<p>Carrying out the same calculations using built-in <code>sf</code> functions takes roughly twice as long to execute.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html">microbenchmark</a></span><span class="op">(</span>pk <span class="op">=</span> <span class="fu"><a href="../reference/point.poly.dist.html">point.poly.dist</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>,
+                                                    <span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, max <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
+                               sf <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span>,
+                                                        <span class="st">'POINT'</span><span class="op">)</span><span class="op">[</span><span class="va">farthest_ind</span><span class="op">]</span>,
+                                                <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span>,
+                               times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+<span class="co">#&gt; Unit: milliseconds</span>
+<span class="co">#&gt;  expr       min        lq     mean    median        uq      max neval</span>
+<span class="co">#&gt;    pk  5.925159  6.151863  6.48578  6.323345  6.528099 11.31712   100</span>
+<span class="co">#&gt;    sf 12.181052 12.462947 13.13009 12.770726 13.243056 17.78772   100</span></code></pre></div>
 </div>
   </div>
 
