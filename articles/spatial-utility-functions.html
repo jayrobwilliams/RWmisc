@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RWmisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -236,7 +236,7 @@
 
 <span class="co">## calculate maximum distance</span>
 <span class="fu"><a href="../reference/point.poly.dist.html">point.poly.dist</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, max <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="co">#&gt; [1] 33561.23</span></code></pre></div>
+<span class="co">#&gt; 33561.23 [m]</span></code></pre></div>
 <p>The following illustration depicts the line connecting the centroid of the polygon to the farthest point on the polygon (red) and the nearest point on the polygon (blue).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -273,8 +273,8 @@
                                times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 <span class="co">#&gt; Unit: milliseconds</span>
 <span class="co">#&gt;  expr       min        lq     mean    median        uq      max neval</span>
-<span class="co">#&gt;    pk  5.925159  6.151863  6.48578  6.323345  6.528099 11.31712   100</span>
-<span class="co">#&gt;    sf 12.181052 12.462947 13.13009 12.770726 13.243056 17.78772   100</span></code></pre></div>
+<span class="co">#&gt;    pk  6.081561  6.226553  6.52247  6.367414  6.465226 11.50234   100</span>
+<span class="co">#&gt;    sf 11.502552 11.746135 12.28156 11.956623 12.131203 16.48984   100</span></code></pre></div>
 </div>
   </div>
 
