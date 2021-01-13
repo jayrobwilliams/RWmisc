@@ -34,17 +34,17 @@ projectUTM.sf <- function(x) {
   if (lat.mean >= 0) {
 
     ## create coordinate reference system object to project spatial object
-    zone <- sf::st_crs(paste('+proj=utm +zone=', zone, sep = ''))
+    zone <- st_crs(paste('+proj=utm +zone=', zone, sep = ''))
 
   } else {
 
     ## create coordinate reference system object to project spatial object
-    zone <- sf::st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
+    zone <- st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
 
   }
 
   ## project spatial object
-  x <- sf::st_transform(x, zone)
+  x <- st_transform(x, zone)
 
   ## return projected spatial object
   x
@@ -66,17 +66,17 @@ projectUTM.sfc <- function(x) {
   if (lat.mean >= 0) {
 
     ## create coordinate reference system object to project spatial object
-    zone <- sf::st_crs(paste('+proj=utm +zone=', zone, sep = ''))
+    zone <- st_crs(paste('+proj=utm +zone=', zone, sep = ''))
 
   } else {
 
     ## create coordinate reference system object to project spatial object
-    zone <- sf::st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
+    zone <- st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
 
   }
 
   ## project spatial object
-  x <- sf::st_transform(x, zone)
+  x <- st_transform(x, zone)
 
   ## return projected spatial object
   x
