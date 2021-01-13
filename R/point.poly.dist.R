@@ -35,7 +35,7 @@ point.poly.dist <- function(point, poly, max = T, by_element = F) {
 
   ## extract border vertices and point coordinates
   border <- st_coordinates(poly)[, 1:2]
-  point <- st_coordinates(point)[, 1:2]
+  point <- matrix(st_coordinates(point)[, 1:2], ncol = 2)
 
   ## extract eastings and northings of all border vertices
   longs <- border[, 1]
