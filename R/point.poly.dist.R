@@ -37,27 +37,24 @@ point.poly.dist <- function(point, poly, max = T, by_element = F) {
   border <- st_coordinates(poly)[, 1:2]
   point <- matrix(st_coordinates(point)[, 1:2], ncol = 2)
 
-  ## extract eastings and northings of all border vertices
-  longs <- border[, 1]
-  lats <- border[, 2]
-
   ## calculate distance from point to every border vertex
-  if (sf::st_is_longlat(poly)) {
+  if (st_is_longlat(poly)) {
     dists <- do.call(rbind,
                      lapply(split(point, seq(nrow(point))),
                             function(x) geosphere::distGeo(border, x)))
   } else {
-    dists <- mapply(dist_fx, longs, lats, MoreArgs = list(point))
+    dists <- mapply(dist_fx, border[, 1], border[, 2], MoreArgs = list(point))
   }
 
   ## return maximum or minimum distance from point to polygon edge
   if (by_element) {
 
-    return(unname(apply(dists, 1, ifelse(max, base::max, min))))
+    return(units::set_units(unname(apply(dists, 1,
+                                         ifelse(max, base::max, min))), 'm'))
 
   } else {
 
-    return(ifelse(max, base::max, min)(dists))
+    return(units::set_units(ifelse(max, base::max, min)(dists), 'm'))
 
   }
 

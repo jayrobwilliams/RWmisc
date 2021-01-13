@@ -24,6 +24,9 @@ projectUTM <- function(x) {
 #' @export
 projectUTM.sf <- function(x) {
 
+  ## if not long-lat, transform to WGS84
+  if (!st_is_longlat(x)) x <- st_transform(x, st_crs(4326))
+
   ## find average UTM zone using longitude(s) of sf object
   zone <- chooseUTM(mean(st_coordinates(x)[, 1]))
 
@@ -34,17 +37,17 @@ projectUTM.sf <- function(x) {
   if (lat.mean >= 0) {
 
     ## create coordinate reference system object to project spatial object
-    zone <- sf::st_crs(paste('+proj=utm +zone=', zone, sep = ''))
+    zone <- st_crs(paste('+proj=utm +zone=', zone, sep = ''))
 
   } else {
 
     ## create coordinate reference system object to project spatial object
-    zone <- sf::st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
+    zone <- st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
 
   }
 
   ## project spatial object
-  x <- sf::st_transform(x, zone)
+  x <- st_transform(x, zone)
 
   ## return projected spatial object
   x
@@ -56,6 +59,9 @@ projectUTM.sf <- function(x) {
 #' @export
 projectUTM.sfc <- function(x) {
 
+  ## if not long-lat, transform to WGS84
+  if (!st_is_longlat(x)) x <- st_transform(x, st_crs(4326))
+
   ## find average UTM zone using longitude(s) of sf object
   zone <- chooseUTM(mean(st_coordinates(x)[, 1]))
 
@@ -66,17 +72,17 @@ projectUTM.sfc <- function(x) {
   if (lat.mean >= 0) {
 
     ## create coordinate reference system object to project spatial object
-    zone <- sf::st_crs(paste('+proj=utm +zone=', zone, sep = ''))
+    zone <- st_crs(paste('+proj=utm +zone=', zone, sep = ''))
 
   } else {
 
     ## create coordinate reference system object to project spatial object
-    zone <- sf::st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
+    zone <- st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
 
   }
 
   ## project spatial object
-  x <- sf::st_transform(x, zone)
+  x <- st_transform(x, zone)
 
   ## return projected spatial object
   x
@@ -87,6 +93,9 @@ projectUTM.sfc <- function(x) {
 #'
 #' @export
 projectUTM.SpatialPointsDataFrame <- function(x) {
+
+  ## if not long-lat, transform to WGS84
+  if (!st_is_longlat(x)) x <- st_transform(x, st_crs(4326))
 
   ## find average UTM zone using longitude(s) of SpatialPoints object
   zone <- chooseUTM(x@coords[, 1])
@@ -118,6 +127,9 @@ projectUTM.SpatialPointsDataFrame <- function(x) {
 #' @export
 projectUTM.SpatialPoints <- function(x) {
 
+  ## if not long-lat, transform to WGS84
+  if (is.projected(x)) x <- spTransform(x, st_crs(4326)$proj4string)
+
   ## find average UTM zone using longitude(s) of SpatialPoints object
   zone <- chooseUTM(x@coords[, 1])
 
@@ -148,6 +160,9 @@ projectUTM.SpatialPoints <- function(x) {
 #' @export
 projectUTM.SpatialPolygonsDataFrame <- function(x) {
 
+  ## if not long-lat, transform to WGS84
+  if (is.projected(x)) x <- spTransform(x, st_crs(4326)$proj4string)
+
   ## find average UTM zone using longitude(s) of SpatialPolygons object
   zone <- chooseUTM(polycoords(x)[, 1])
 
@@ -177,6 +192,9 @@ projectUTM.SpatialPolygonsDataFrame <- function(x) {
 #'
 #' @export
 projectUTM.SpatialPolygons <- function(x) {
+
+  ## if not long-lat, transform to WGS84
+  if (is.projected(x)) x <- spTransform(x, st_crs(4326)$proj4string)
 
   ## find average UTM zone using longitude(s) of SpatialPolygons object
   zone <- chooseUTM(polycoords(x)[, 1])
