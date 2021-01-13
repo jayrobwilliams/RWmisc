@@ -17,6 +17,7 @@ Imports:
 Suggests:
     ggplot2,
     geosphere,
+    microbenchmark,
     knitr,
     rmarkdown,
     testthat (>= 2.1.0),

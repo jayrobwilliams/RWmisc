@@ -20,7 +20,8 @@ knitr::opts_chunk$set(
 ```
 
 This package contains convenience functions for carrying out GIS operations
-that I have repeatedly encountered in my research.
+that I have repeatedly encountered in my research. The following packages are
+used in this vignette:
 
 ```{r setup, message = F, warning = F, results = 'hide'}
 library(sf)
@@ -97,3 +98,58 @@ plot(nc$geometry)
 plot(projectUTM(nc)$geometry)
 ```
 
+# Maximum and minimum distance from point(s) to a polygon
+
+The `point.poly.dist` function computes the maximum or minimum distance from a
+point or set of points to a polygon. It correctly calculates distances for both
+geographic and projected data.
+
+```{r point-poly-dist}
+## create north carolina centroids
+nc_centroids <- st_centroid(nc)
+
+## calculate maximum distance
+point.poly.dist(nc_centroids[53,]$geometry, nc[53,]$geometry, max = T)
+```
+
+The following illustration depicts the line connecting the centroid of the
+polygon to the farthest point on the polygon (red) and the nearest point on the
+polygon (blue).
+
+```{r point-poly-dist-illus}
+nc_points <- st_geometry(nc[53,]) %>%
+  st_cast('POINT')
+
+farthest_ind <- st_distance(nc_points, nc_centroids[53,]) %>%
+  which.max()
+
+farthest_point <- rbind(st_coordinates(nc_points[farthest_ind,]),
+                        st_coordinates(nc_centroids[53,])) %>% 
+  st_linestring()
+
+nearest_ind <- st_distance(nc_points, nc_centroids[53,]) %>%
+  which.min()
+
+nearest_point <- rbind(st_coordinates(nc_points[nearest_ind,]),
+                        st_coordinates(nc_centroids[53,])) %>% 
+  st_linestring()
+
+## plot
+par(mar = rep(0,4))
+plot(nc[53,]$geometry)
+plot(nc_centroids[53,]$geometry, add = T)
+plot(farthest_point, add = T, col = 'red')
+plot(nearest_point, add = T, col = 'blue')
+```
+
+Carrying out the same calculations using built-in `sf` functions  takes roughly
+twice as long to execute.
+
+```{r point-poly-dist-benchmark}
+microbenchmark::microbenchmark(pk = point.poly.dist(nc_centroids[53,]$geometry,
+                                                    nc[53,]$geometry, max = T),
+                               sf = st_distance(st_cast(st_geometry(nc[53,]),
+                                                        'POINT')[farthest_ind],
+                                                nc_centroids[53,]),
+                               times = 100)
+```
