@@ -97,3 +97,16 @@ plot(nc$geometry)
 plot(projectUTM(nc)$geometry)
 ```
 
+# 
+
+```{r}
+
+
+nc_centroids <- st_centroid(nc)
+
+plot(nc[1,]$geometry)
+plot(nc_centroids[1,]$geometry, add = T)
+
+point.poly.dist(nc_centroids[1,]$geometry, nc[1,]$geometry)
+```
+
