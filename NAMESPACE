@@ -3,6 +3,7 @@
 S3method(projectUTM,SpatialPointsDataFrame)
 S3method(projectUTM,SpatialPolygonsDataFrame)
 S3method(projectUTM,sf)
+S3method(projectUTM,sfc)
 export(UTMzones)
 export(chooseUTM)
 export(long2UTM)

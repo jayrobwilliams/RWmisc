@@ -16,6 +16,7 @@ Imports:
     raster
 Suggests:
     ggplot2,
+    geosphere,
     knitr,
     rmarkdown,
     testthat (>= 2.1.0),
