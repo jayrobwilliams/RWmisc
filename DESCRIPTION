@@ -13,7 +13,8 @@ Depends:
 Imports:
     sf,
     sp,
-    raster
+    raster,
+    units
 Suggests:
     ggplot2,
     geosphere,
