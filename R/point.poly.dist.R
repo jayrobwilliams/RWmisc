@@ -49,11 +49,12 @@ point.poly.dist <- function(point, poly, max = T, by_element = F) {
   ## return maximum or minimum distance from point to polygon edge
   if (by_element) {
 
-    return(unname(apply(dists, 1, ifelse(max, base::max, min))))
+    return(units::set_units(unname(apply(dists, 1,
+                                         ifelse(max, base::max, min))), 'm'))
 
   } else {
 
-    return(ifelse(max, base::max, min)(dists))
+    return(units::set_units(ifelse(max, base::max, min)(dists), 'm'))
 
   }
 
