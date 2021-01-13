@@ -89,10 +89,10 @@ overlap.weight <- function(raster, polygons, count = F, warn = T) {
   raster_poly_count <- 1 / raster_poly_count
 
   ## return the weighted original raster
-  if (!warn) {
-    suppressWarnings(return(raster * raster_poly_count))
-  } else {
+  if (warn) {
     return(raster * raster_poly_count)
-    }
+  } else {
+    suppressWarnings(return(raster * raster_poly_count))
+  }
 
 }
