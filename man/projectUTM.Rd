@@ -7,7 +7,7 @@
 \alias{projectUTM.SpatialPolygonsDataFrame}
 \title{Project to UTM}
 \usage{
-projectUTM(x, ...)
+projectUTM(x)
 
 \method{projectUTM}{sf}(x)
 

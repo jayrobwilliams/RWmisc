@@ -13,7 +13,7 @@
 #' nc <- st_read(system.file("shape/nc.shp", package="sf"))
 #' st_crs(projectUTM(nc))
 
-projectUTM <- function(x, ...) {
+projectUTM <- function(x) {
 
   UseMethod('projectUTM', x)
 
