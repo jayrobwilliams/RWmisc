@@ -22,7 +22,7 @@ projectUTM <- function(x) {
 #' @rdname projectUTM
 #'
 #' @export
-projectUTM.sf <- projectUTM.sfc <- function(x) {
+projectUTM.sf <- function(x) {
 
   ## find average UTM zone using longitude(s) of sf object
   zone <- chooseUTM(mean(st_coordinates(x)[, 1]))
@@ -54,7 +54,39 @@ projectUTM.sf <- projectUTM.sfc <- function(x) {
 #' @rdname projectUTM
 #'
 #' @export
-projectUTM.SpatialPointsDataFrame <- projectUTM.SpatialPoints <- function(x) {
+projectUTM.sfc <- function(x) {
+
+  ## find average UTM zone using longitude(s) of sf object
+  zone <- chooseUTM(mean(st_coordinates(x)[, 1]))
+
+  ## save latitude mean to determine if majority of features fall in southern hemisphere
+  lat.mean <- mean(st_coordinates(x)[, 2])
+
+  ## if average of latitude values is negative, add +south the coordinate reference system
+  if (lat.mean >= 0) {
+
+    ## create coordinate reference system object to project spatial object
+    zone <- sf::st_crs(paste('+proj=utm +zone=', zone, sep = ''))
+
+  } else {
+
+    ## create coordinate reference system object to project spatial object
+    zone <- sf::st_crs(paste('+proj=utm +south +zone=', zone, sep = ''))
+
+  }
+
+  ## project spatial object
+  x <- sf::st_transform(x, zone)
+
+  ## return projected spatial object
+  x
+
+}
+
+#' @rdname projectUTM
+#'
+#' @export
+projectUTM.SpatialPointsDataFrame <- function(x) {
 
   ## find average UTM zone using longitude(s) of SpatialPoints object
   zone <- chooseUTM(x@coords[, 1])
@@ -84,7 +116,67 @@ projectUTM.SpatialPointsDataFrame <- projectUTM.SpatialPoints <- function(x) {
 #' @rdname projectUTM
 #'
 #' @export
-projectUTM.SpatialPolygonsDataFrame <- projectUTM.SpatialPolygons <- function(x) {
+projectUTM.SpatialPoints <- function(x) {
+
+  ## find average UTM zone using longitude(s) of SpatialPoints object
+  zone <- chooseUTM(x@coords[, 1])
+
+  ## save latitude mean to determine if features falls in southern hemisphere
+  lat.mean <- mean(x@coords[, 2])
+
+  ## if average of latitude values is negative, add +south the coordinate reference system
+  if (lat.mean >= 0) {
+
+    ## create coordinate reference system object to project spatial object
+    zone <- CRS(paste('+proj=utm +zone=', zone, sep = ''))
+  } else {
+
+    ## create coordinate reference system object to project spatial object
+    zone <- CRS(paste('+proj=utm +south +zone=', zone, sep = ''))
+  }
+
+  ## project spatial object
+  x <- spTransform(x, zone)
+
+  ## return projected spatial object
+  x
+
+}
+
+#' @rdname projectUTM
+#'
+#' @export
+projectUTM.SpatialPolygonsDataFrame <- function(x) {
+
+  ## find average UTM zone using longitude(s) of SpatialPolygons object
+  zone <- chooseUTM(polycoords(x)[, 1])
+
+  ## save latitude mean to determine if features falls in southern hemisphere
+  lat.mean <- mean(polycoords(x)[, 2])
+
+  ## if average of latitude values is negative, add +south the coordinate reference system
+  if (lat.mean >= 0) {
+
+    ## create coordinate reference system object to project spatial object
+    zone <- CRS(paste('+proj=utm +zone=', zone, sep = ''))
+  } else {
+
+    ## create coordinate reference system object to project spatial object
+    zone <- CRS(paste('+proj=utm +south +zone=', zone, sep = ''))
+  }
+
+  ## project spatial object
+  x <- spTransform(x, zone)
+
+  ## return projected spatial object
+  x
+
+}
+
+#' @rdname projectUTM
+#'
+#' @export
+projectUTM.SpatialPolygons <- function(x) {
 
   ## find average UTM zone using longitude(s) of SpatialPolygons object
   zone <- chooseUTM(polycoords(x)[, 1])
