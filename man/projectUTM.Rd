@@ -5,7 +5,9 @@
 \alias{projectUTM.sf}
 \alias{projectUTM.sfc}
 \alias{projectUTM.SpatialPointsDataFrame}
+\alias{projectUTM.SpatialPoints}
 \alias{projectUTM.SpatialPolygonsDataFrame}
+\alias{projectUTM.SpatialPolygons}
 \title{Project to UTM}
 \usage{
 projectUTM(x)
@@ -16,7 +18,11 @@ projectUTM(x)
 
 \method{projectUTM}{SpatialPointsDataFrame}(x)
 
+\method{projectUTM}{SpatialPoints}(x)
+
 \method{projectUTM}{SpatialPolygonsDataFrame}(x)
+
+\method{projectUTM}{SpatialPolygons}(x)
 }
 \arguments{
 \item{x}{An \code{sf} or \code{sp} object in latitude-longitude CRS.}
