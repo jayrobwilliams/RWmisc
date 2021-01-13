@@ -47,14 +47,10 @@
 
 overlap.weight <- function(raster, polygons, count = F, warn = T) {
 
+  polygons <- poly.conv(polygons, raster)
+
   ## create list for raster from each polygon
   rasters <- list()
-
-  if (inherits(polygons, 'sfc_POLYGON')) {
-
-    polygons <- as_Spatial(polygons)
-
-  }
 
   ## loop through polygons
   for (i in 1:length(polygons)) {
@@ -93,6 +89,39 @@ overlap.weight <- function(raster, polygons, count = F, warn = T) {
     return(raster * raster_poly_count)
   } else {
     suppressWarnings(return(raster * raster_poly_count))
+  }
+
+}
+
+poly.conv <- function(x, y) {
+  UseMethod('poly.conv', x)
+}
+
+poly.conv.SpatialPolygons <- poly.conv.SpatialPolygonsDataFrame <- function(x, y) {
+  if (identicalCRS(x, y)) {
+    return(x)
+  } else {
+    stop('raster and polygons do not share CRS')
+  }
+}
+
+poly.conv.sfc_POLYGON <- poly.conv.sfc_MULTIPOLYGON <- function(x, y) {
+  if (st_crs(x) == st_crs(y)) {
+    return(as_Spatial(x))
+  } else {
+    stop('raster and polygons do not share CRS')
+  }
+}
+
+poly.conv.sf <- function(x, y) {
+  if (st_crs(x) == st_crs(y)) {
+    if (inherits(st_geometry(x), c('sfc_POLYGON', 'sfc_MULTIPOLYGON'))) {
+      return(as_Spatial(x))
+    } else {
+      stop('sfc_POLYGON or sfc_MULTIPOLYGON geometries required')
+    }
+  } else {
+    stop('raster and polygons do not share CRS')
   }
 
 }
