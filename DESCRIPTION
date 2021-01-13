@@ -1,13 +1,12 @@
 Package: RWmisc
 Type: Package
 Title: Rob Williams Miscellaneous
-Date: 2019-02-13
-Version: 0.0.3
+Date: 2020-01-13
+Version: 0.1.0
 Authors@R: person("Rob", "Williams", email = "jayrobwilliams@gmail.com", 
              role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9259-3883"))
-Description: Contains convenience functions for working with
-    spatial data across multiple UTM zones and recoding
-    data commonly used in international relations.
+Description: Contains convenience functions for working with spatial data across
+    multiple UTM zones and spatial analysis of conflict data.
 Depends:
     R (>= 3.4.0)
 Imports:
