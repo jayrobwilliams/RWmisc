@@ -25,7 +25,7 @@ an intersection of the raster and the polygons. Default \code{TRUE}.}
 a RasterLayer object.
 }
 \description{
-Weight raster cells by overlapping polygons to avoid overcounting when aggregating by polygons
+Weight raster cells by overlapping polygons to avoid over-counting when aggregating by polygons
 }
 \details{
 This function takes a raster and a set of polygons as arguments.

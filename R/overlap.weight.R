@@ -1,6 +1,6 @@
 #' Weight Raster Cells by Overlapping Polygons
 #'
-#' Weight raster cells by overlapping polygons to avoid overcounting when aggregating by polygons
+#' Weight raster cells by overlapping polygons to avoid over-counting when aggregating by polygons
 #'
 #' @param raster a RasterLayer object.
 #' @param polygons a SpatialPolygons, SpatialPolygonsDataFrame, or simple feature
