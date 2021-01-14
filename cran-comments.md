@@ -1,3 +1,9 @@
+## Resubmission notes
+
+This is a resubmission. In this version I have:
+
+* Fixed the Date field in DESCRIPTION from 2020-01-14 to 2021-01-14
+
 ## Test environments
 
 * local macOS 10.13.6, release
