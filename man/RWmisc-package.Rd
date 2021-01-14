@@ -4,11 +4,12 @@
 \name{RWmisc-package}
 \alias{RWmisc}
 \alias{RWmisc-package}
-\title{RWmisc: Rob Williams Miscellaneous}
+\title{RWmisc: Rob Williams Miscellaneous Functions}
 \description{
-Contains convenience functions for working with
-    spatial data across multiple UTM zones and recoding
-    data commonly used in international relations.
+Contains convenience functions for working with spatial data across
+    multiple UTM zones, raster-vector operations common in the analysis of 
+    conflict data, and converting degrees, minutes, and seconds latitude and
+    longitude coordinates to decimal degrees.
 }
 \details{
 Convenience functions for working with spatial data and my workflow.
