@@ -40,7 +40,6 @@ jobs:
 
       - name: Install system dependencies (macOS)
         run: |
-          rm '/usr/local/bin/gfortran'
           brew install geos gdal proj udunits
 
       - name: Install dependencies
