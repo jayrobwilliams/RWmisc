@@ -27,9 +27,10 @@ decimal degrees for conversion to spatial objects.
 determine positioning of coordinates.
 }
 \examples{
-df <- data.frame(lon = c("-122° 19' 55\"",
+ll <- data.frame(lon = c("-122° 19' 55\"",
                          "71° 3' 32\" W"),
                  lat = c("47° 36' 22\"",
-                         "42° 21' 36\" N"))
-dms2dd(df[, 'lon'], df[, 'lat'])
+                         "42° 21' 36\" N"),
+                         stringsAsFactors = F)
+dms2dd(ll[, 'lon'], ll[, 'lat'])
 }
