@@ -1,11 +1,11 @@
 ## Test environments
 
-* local macOS 10.13.6 ; R 4.0.3
-* GitHub Actions Ubuntu 20.04; R release
-* GitHub Actions Ubuntu 20.04; R devel
-* GitHub Actions Ubuntu 20.04; R oldrel
-* GitHub Actions Windows latest; R release
-* win-builder Windows latest; R release
+* local macOS 10.13.6, release
+* GitHub Actions Ubuntu 20.04, release
+* GitHub Actions Ubuntu 20.04, devel
+* GitHub Actions Ubuntu 20.04, oldrel
+* GitHub Actions Windows latest, release
+* win-builder, release
 
 ## R CMD check results
 
