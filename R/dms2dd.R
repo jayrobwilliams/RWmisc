@@ -21,11 +21,12 @@
 #' @export
 #'
 #' @examples
-#' df <- data.frame(lon = c("-122° 19' 55\"",
+#' ll <- data.frame(lon = c("-122° 19' 55\"",
 #'                          "71° 3' 32\" W"),
 #'                  lat = c("47° 36' 22\"",
-#'                          "42° 21' 36\" N"))
-#' dms2dd(df[, 'lon'], df[, 'lat'])
+#'                          "42° 21' 36\" N"),
+#'                          stringsAsFactors = F)
+#' dms2dd(ll[, 'lon'], ll[, 'lat'])
 
 dms2dd <- function(lon, lat) {
 
@@ -38,7 +39,7 @@ dms2dd <- function(lon, lat) {
 
   for (i in 1:length(lon)) {
 
-    coords <- strsplit(c(enc2native(lon[i]), enc2native(lat[i])), '\\s')
+    coords <- strsplit(c(lon[i], lat[i]), '\\s')
 
     card_dir <- vapply(coords, function(x) length(x) == 4, FUN.VALUE = T)
 
