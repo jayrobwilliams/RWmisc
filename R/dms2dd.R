@@ -38,7 +38,7 @@ dms2dd <- function(lon, lat) {
 
   for (i in 1:length(lon)) {
 
-    coords <- strsplit(c(lon[i], lat[i]), '\\s')
+    coords <- strsplit(c(enc2utf8(lon[i]), enc2utf8(lat[i])), '\\s')
 
     card_dir <- vapply(coords, function(x) length(x) == 4, FUN.VALUE = T)
 
