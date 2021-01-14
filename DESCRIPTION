@@ -1,12 +1,14 @@
 Package: RWmisc
 Type: Package
-Title: Rob Williams Miscellaneous
-Date: 2020-01-13
+Title: Rob Williams Miscellaneous Functions
+Date: 2020-01-14
 Version: 0.1.0
 Authors@R: person("Rob", "Williams", email = "jayrobwilliams@gmail.com", 
              role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9259-3883"))
 Description: Contains convenience functions for working with spatial data across
-    multiple UTM zones and spatial analysis of conflict data.
+    multiple UTM zones, raster-vector operations common in the analysis of 
+    conflict data, and converting degrees, minutes, and seconds latitude and
+    longitude coordinates to decimal degrees.
 Depends:
     R (>= 3.4.0)
 Imports:
