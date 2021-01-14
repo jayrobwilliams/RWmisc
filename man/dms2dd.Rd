@@ -31,6 +31,6 @@ ll <- data.frame(lon = c("-122° 19' 55\"",
                          "71° 3' 32\" W"),
                  lat = c("47° 36' 22\"",
                          "42° 21' 36\" N"),
-                         stringsAsFactors = F)
+                 stringsAsFactors = FALSE)
 dms2dd(ll[, 'lon'], ll[, 'lat'])
 }

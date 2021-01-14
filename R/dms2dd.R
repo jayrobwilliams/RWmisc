@@ -25,7 +25,7 @@
 #'                          "71° 3' 32\" W"),
 #'                  lat = c("47° 36' 22\"",
 #'                          "42° 21' 36\" N"),
-#'                          stringsAsFactors = F)
+#'                  stringsAsFactors = FALSE)
 #' dms2dd(ll[, 'lon'], ll[, 'lat'])
 
 dms2dd <- function(lon, lat) {
