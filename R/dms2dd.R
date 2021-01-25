@@ -73,7 +73,7 @@ dms2dd <- function(lon, lat) {
                     set_units(set_units(as.numeric(sub("\"", "",
                                                        coords[[1]][3])),
                                         'arc_second'),
-                              'degree_east')) * north
+                              'degree_east')) * east
 
     mat[i, 2] <- (set_units(set_units(as.numeric(sub("°|deg|degree", "",
                                                      coords[[2]][1])),
