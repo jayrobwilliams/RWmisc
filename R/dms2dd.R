@@ -62,13 +62,31 @@ dms2dd <- function(lon, lat) {
 
     }
 
-    mat[i, 1] <- (set_units(as_units(coords[[1]][1]), 'degree_east') +
-                    set_units(as_units(coords[[1]][2]), 'degree_east') +
-                    set_units(as_units(coords[[1]][3]), 'degree_east')) * east
+    mat[i, 1] <- (set_units(set_units(as.numeric(sub("°|deg|degree", "",
+                                                     coords[[1]][1])),
+                                      'arc_degree'),
+                            'degree_east') +
+                    set_units(set_units(as.numeric(sub("'", "",
+                                                       coords[[1]][2])),
+                                        'arc_minute'),
+                              'degree_east') +
+                    set_units(set_units(as.numeric(sub("\"", "",
+                                                       coords[[1]][3])),
+                                        'arc_second'),
+                              'degree_east')) * east
 
-    mat[i, 2] <- (set_units(as_units(coords[[2]][1]), 'degree_north') +
-                    set_units(as_units(coords[[2]][2]), 'degree_north') +
-                    set_units(as_units(coords[[2]][3]), 'degree_north')) * north
+    mat[i, 2] <- (set_units(set_units(as.numeric(sub("°|deg|degree", "",
+                                                     coords[[2]][1])),
+                                      'arc_degree'),
+                            'degree_north') +
+                    set_units(set_units(as.numeric(sub("'", "",
+                                                       coords[[2]][2])),
+                                        'arc_minute'),
+                              'degree_north') +
+                    set_units(set_units(as.numeric(sub("\"", "",
+                                                       coords[[2]][3])),
+                                        'arc_second'),
+                              'degree_north')) * east
 
 
   }
