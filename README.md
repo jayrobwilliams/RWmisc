@@ -93,4 +93,4 @@ ggplot(aes(fill = BIR74), data = nc) +
   theme_rw()
 ```
 
-![](README/theme_rw-1.png)![](README/theme_rw-2.png)
+![](man/figures/README-theme_rw-1.png)![](man/figures/README-theme_rw-2.png)
