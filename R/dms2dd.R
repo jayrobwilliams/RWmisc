@@ -62,7 +62,7 @@ dms2dd <- function(lon, lat) {
 
     }
 
-    mat[i, 1] <- (set_units(set_units(as.numeric(sub("°|deg|degree", "",
+    mat[i, 1] <- (set_units(set_units(as.numeric(sub("\u00b0|deg|degree", "",
                                                      coords[[1]][1])),
                                       'arc_degree'),
                             'degree_east') +
@@ -75,7 +75,7 @@ dms2dd <- function(lon, lat) {
                                         'arc_second'),
                               'degree_east')) * east
 
-    mat[i, 2] <- (set_units(set_units(as.numeric(sub("°|deg|degree", "",
+    mat[i, 2] <- (set_units(set_units(as.numeric(sub("\u00b0|deg|degree", "",
                                                      coords[[2]][1])),
                                       'arc_degree'),
                             'degree_north') +
