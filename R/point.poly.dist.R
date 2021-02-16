@@ -39,6 +39,13 @@ point.poly.dist <- function(point, poly, max = T, by_element = F) {
 
   ## calculate distance from point to every border vertex
   if (st_is_longlat(poly)) {
+
+    if (!'geosphere' %in% rownames(utils::installed.packages())) {
+      stop(paste0('Package geosphere required to calculate distances for ',
+                  'unprojected data\n',
+                  'Install with install.packages("geosphere")\n'))
+    }
+
     dists <- do.call(rbind,
                      lapply(split(point, seq(nrow(point))),
                             function(x) geosphere::distGeo(border, x)))
