@@ -1,4 +1,4 @@
 #' @details
-#' Convenience functions for working with spatial data and my workflow.
+#' Convenience functions for working with spatial data.
 #' @keywords internal
 "_PACKAGE"
