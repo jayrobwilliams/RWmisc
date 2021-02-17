@@ -24,7 +24,7 @@
 #'                  crs = 4326)
 #' point.poly.dist(points, polys)
 
-point.poly.dist <- function(point, poly, max = T, by_element = F) {
+point.poly.dist <- function(point, poly, max = TRUE, by_element = FALSE) {
 
   ## convert to sfc if necessary
   if (inherits(poly, 'Spatial')) poly <- st_as_sfc(poly)
@@ -40,10 +40,10 @@ point.poly.dist <- function(point, poly, max = T, by_element = F) {
   ## calculate distance from point to every border vertex
   if (st_is_longlat(poly)) {
 
-    if (!'geosphere' %in% rownames(utils::installed.packages())) {
-      stop(paste0('Package geosphere required to calculate distances for ',
-                  'unprojected data\n',
-                  'Install with install.packages("geosphere")\n'))
+    if (!requireNamespace("geosphere")) {
+      stop(paste0("Package geosphere required to calculate distances for ",
+                  "unprojected data\n",
+                  "Install with: install.packages(\"geosphere\")\n"))
     }
 
     dists <- do.call(rbind,

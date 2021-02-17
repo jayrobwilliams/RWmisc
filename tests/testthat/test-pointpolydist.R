@@ -10,7 +10,7 @@ test_that("point.poly.dist works with arguments", {
   expect_equal(point.poly.dist(points_t, poly_t, max = FALSE), 61895.43,
                tolerance = 1e-3)
   expect_equal(point.poly.dist(points_t, poly_t, max = FALSE,
-                               by_element = T)[2], 61895.43,
+                               by_element = TRUE)[2], 61895.43,
                tolerance = 1e-3)
 })
 

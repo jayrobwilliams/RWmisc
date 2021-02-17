@@ -41,7 +41,7 @@ dms2dd <- function(lon, lat) {
 
     coords <- strsplit(c(lon[i], lat[i]), '\\s')
 
-    card_dir <- vapply(coords, function(x) length(x) == 4, FUN.VALUE = T)
+    card_dir <- vapply(coords, function(x) length(x) == 4, FUN.VALUE = TRUE)
 
     if (all(card_dir)) {
 

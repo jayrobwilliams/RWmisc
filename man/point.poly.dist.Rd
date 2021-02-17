@@ -4,7 +4,7 @@
 \alias{point.poly.dist}
 \title{Point-Polygon Distances}
 \usage{
-point.poly.dist(point, poly, max = T, by_element = F)
+point.poly.dist(point, poly, max = TRUE, by_element = FALSE)
 }
 \arguments{
 \item{point}{A simplefeatures object of class point.}

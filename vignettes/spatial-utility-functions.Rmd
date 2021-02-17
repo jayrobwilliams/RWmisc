@@ -17,13 +17,16 @@ knitr::opts_chunk$set(
   fig.height = 3, 
   fig.align = 'center'
 )
+
+## old graphical parameters
+oldpar <- par(mfrow = c(1,2))
 ```
 
 This package contains convenience functions for carrying out GIS operations
 that I have repeatedly encountered in my research. The following packages are
 used in this vignette:
 
-```{r setup, message = F, warning = F, results = 'hide'}
+```{r setup, message = FALSE, warning = FALSE, results = 'hide'}
 library(sf)
 library(raster)
 library(RWmisc)
@@ -58,15 +61,15 @@ par(mfrow = c(1, 3))
 
 ## plot raw raster values
 plot(raster_t, main = 'raw')
-plot(polys_t, add = T)
+plot(polys_t, add = TRUE)
 
 ## plot count of overlapping polygons
-plot(overlap.weight(raster_t, polys_t, count = T), main = "count")
-plot(polys_t, add = T)
+plot(overlap.weight(raster_t, polys_t, count = TRUE), main = "count")
+plot(polys_t, add = TRUE)
 
 ## plot overlap-weighted raster values
 plot(overlap.weight(raster_t, polys_t), main = "weighted")
-plot(polys_t, add = T)
+plot(polys_t, add = TRUE)
 ```
 
 # Projecting spatial objects to UTM
@@ -109,7 +112,7 @@ geographic and projected data.
 nc_centroids <- st_centroid(nc)
 
 ## calculate maximum distance
-point.poly.dist(nc_centroids[53,]$geometry, nc[53,]$geometry, max = T)
+point.poly.dist(nc_centroids[53,]$geometry, nc[53,]$geometry, max = TRUE)
 ```
 
 The following illustration depicts the line connecting the centroid of the
@@ -137,9 +140,9 @@ nearest_point <- rbind(st_coordinates(nc_points[nearest_ind,]),
 ## plot
 par(mar = rep(0,4))
 plot(nc[53,]$geometry)
-plot(nc_centroids[53,]$geometry, add = T)
-plot(farthest_point, add = T, col = 'red')
-plot(nearest_point, add = T, col = 'blue')
+plot(nc_centroids[53,]$geometry, add = TRUE)
+plot(farthest_point, add = TRUE, col = 'red')
+plot(nearest_point, add = TRUE, col = 'blue')
 ```
 
 Carrying out the same calculations using built-in `sf` functions  takes roughly
@@ -147,9 +150,14 @@ twice as long to execute.
 
 ```{r point-poly-dist-benchmark}
 microbenchmark::microbenchmark(pk = point.poly.dist(nc_centroids[53,]$geometry,
-                                                    nc[53,]$geometry, max = T),
+                                                    nc[53,]$geometry, max = TRUE),
                                sf = st_distance(st_cast(st_geometry(nc[53,]),
                                                         'POINT')[farthest_ind],
                                                 nc_centroids[53,]),
                                times = 100)
 ```
+
+```{r oldpar, echo = FALSE}
+par(oldpar)
+```
+

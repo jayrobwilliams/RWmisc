@@ -2,6 +2,7 @@
 #'
 #' A ggplot theme with no grid elements or gray background.
 #'
+#' @return A ggplot [theme][ggplot2::theme] object.
 #' @export
 #'
 #' @examples

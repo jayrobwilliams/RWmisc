@@ -45,7 +45,7 @@
 #'                    crs = CRS(st_crs(polys_t)$proj4string))
 #' overlap.weight(raster_t, polys_t)
 
-overlap.weight <- function(raster, polygons, count = F, warn = T) {
+overlap.weight <- function(raster, polygons, count = FALSE, warn = TRUE) {
 
   polygons <- poly.conv(polygons, raster)
 

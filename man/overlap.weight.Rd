@@ -4,7 +4,7 @@
 \alias{overlap.weight}
 \title{Weight Raster Cells by Overlapping Polygons}
 \usage{
-overlap.weight(raster, polygons, count = F, warn = T)
+overlap.weight(raster, polygons, count = FALSE, warn = TRUE)
 }
 \arguments{
 \item{raster}{a RasterLayer object.}

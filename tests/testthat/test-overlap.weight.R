@@ -28,9 +28,9 @@ test_that("overlap.weight works with SpatialPolygonsDataFrame", {
 })
 
 test_that("overlap.weight works with count", {
-  expect_equal(overlap.weight(raster_t, polys_t, count = T)[4,4], 2)
+  expect_equal(overlap.weight(raster_t, polys_t, count = TRUE)[4,4], 2)
 })
 
 test_that("overlap.weight works silently", {
-  expect_silent(overlap.weight(raster_t, polys_t, warn = F))
+  expect_silent(overlap.weight(raster_t, polys_t, warn = FALSE))
 })
