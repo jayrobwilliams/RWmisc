@@ -4,7 +4,7 @@ home:
 template:
   opengraph:
     image:
-      src: articles/spatial-utility-functions_files/figure-html/point-poly-dist-illus-1.png
+      src: https://jayrobwilliams.com/RWmisc/articles/spatial-utility-functions_files/figure-html/point-poly-dist-illus-1.png
       alt: "Maximum and minimum distances from a point inside a polygon to an edge"
     twitter:
       creator: "@jayrobw"
