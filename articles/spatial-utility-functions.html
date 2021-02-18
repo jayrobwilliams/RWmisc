@@ -13,6 +13,11 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Spatial Utility Functions">
 <meta property="og:description" content="RWmisc">
+<meta property="og:image" content="/articles/spatial-utility-functions_files/figure-html/point-poly-dist-illus-1.png">
+<meta property="og:image:alt" content="Maximum and minimum distances from a point inside a polygon to an edge">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@jayrobw">
+<meta name="twitter:site" content="@jayrobw">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -276,9 +281,9 @@
                                                 <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span>,
                                times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 <span class="co">#&gt; Unit: milliseconds</span>
-<span class="co">#&gt;  expr       min        lq     mean    median        uq      max neval</span>
-<span class="co">#&gt;    pk  6.180192  6.370976  6.69384  6.483332  6.656749 13.28557   100</span>
-<span class="co">#&gt;    sf 11.672243 11.946050 12.55123 12.104901 12.356514 17.76061   100</span></code></pre></div>
+<span class="co">#&gt;  expr       min        lq      mean    median        uq      max neval</span>
+<span class="co">#&gt;    pk  6.692907  6.929521  7.373754  7.109903  7.319793 12.31248   100</span>
+<span class="co">#&gt;    sf 12.432685 12.855830 13.498318 13.129967 13.355828 19.36345   100</span></code></pre></div>
 </div>
   </div>
 
