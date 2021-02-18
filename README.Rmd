@@ -8,12 +8,15 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-"
+  fig.path = "man/figures/README-",
+  messages = FALSE,
+  results = 'hide'
 )
 ```
 
 <!-- badges: start -->
 [![R build status](https://github.com/jayrobwilliams/RWmisc/workflows/R-CMD-check/badge.svg)](https://github.com/jayrobwilliams/RWmisc/actions)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/RWmisc)](https://CRAN.R-project.org/package=RWmisc)
 [![codecov](https://codecov.io/gh/jayrobwilliams/RWmisc/branch/master/graph/badge.svg)](https://codecov.io/gh/jayrobwilliams/RWmisc)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%203%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-3.0.html)
 <!-- badges: end -->
@@ -26,11 +29,17 @@ overlapping polygons.
 
 # Installation
 
+To install the latest release on CRAN:
+
+```{r cran-install, eval = FALSE}
+install.packages("RWmisc")
+```
+
 You can install the latest development version from GitHub with:
 
-```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-remotes::install_github("jayrobwilliams/RWmisc")
+```{r gh-install, eval = FALSE}
+library(remotes)
+install_github("jayrobwilliams/RWmisc")
 ```
 
 # Examples
@@ -43,7 +52,6 @@ already-projected objects in other projected coordinate reference systems.
 
 ```{r projectUTM}
 library(sf)
-
 library(RWmisc)
 
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
