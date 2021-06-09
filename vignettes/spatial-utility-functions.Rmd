@@ -126,14 +126,14 @@ nc_points <- st_geometry(nc[53,]) %>%
 farthest_ind <- st_distance(nc_points, nc_centroids[53,]) %>%
   which.max()
 
-farthest_point <- rbind(st_coordinates(nc_points[farthest_ind,]),
+farthest_point <- rbind(st_coordinates(nc_points[farthest_ind]),
                         st_coordinates(nc_centroids[53,])) %>% 
   st_linestring()
 
 nearest_ind <- st_distance(nc_points, nc_centroids[53,]) %>%
   which.min()
 
-nearest_point <- rbind(st_coordinates(nc_points[nearest_ind,]),
+nearest_point <- rbind(st_coordinates(nc_points[nearest_ind]),
                         st_coordinates(nc_centroids[53,])) %>% 
   st_linestring()
 
