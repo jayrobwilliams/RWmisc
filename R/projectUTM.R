@@ -25,7 +25,7 @@ projectUTM <- function(x) {
 projectUTM.sf <- function(x) {
 
   ## if not long-lat, transform to WGS84
-  if (!st_is_longlat(x)) x <- st_transform(x, st_crs(4326))
+  if (!st_is_longlat(x)) x <- st_transform(x, st_crs('OGC:CRS84'))
 
   ## find average UTM zone using longitude(s) of sf object
   zone <- chooseUTM(mean(st_coordinates(x)[, 1]))
@@ -60,7 +60,7 @@ projectUTM.sf <- function(x) {
 projectUTM.sfc <- function(x) {
 
   ## if not long-lat, transform to WGS84
-  if (!st_is_longlat(x)) x <- st_transform(x, st_crs(4326))
+  if (!st_is_longlat(x)) x <- st_transform(x, st_crs('OGC:CRS84'))
 
   ## find average UTM zone using longitude(s) of sf object
   zone <- chooseUTM(mean(st_coordinates(x)[, 1]))
@@ -95,7 +95,7 @@ projectUTM.sfc <- function(x) {
 projectUTM.SpatialPointsDataFrame <- function(x) {
 
   ## if not long-lat, transform to WGS84
-  if (!st_is_longlat(x)) x <- st_transform(x, st_crs(4326))
+  if (!st_is_longlat(x)) x <- st_transform(x, st_crs('OGC:CRS84'))
 
   ## find average UTM zone using longitude(s) of SpatialPoints object
   zone <- chooseUTM(x@coords[, 1])
@@ -128,7 +128,7 @@ projectUTM.SpatialPointsDataFrame <- function(x) {
 projectUTM.SpatialPoints <- function(x) {
 
   ## if not long-lat, transform to WGS84
-  if (is.projected(x)) x <- spTransform(x, st_crs(4326)$proj4string)
+  if (is.projected(x)) x <- spTransform(x, st_crs('OGC:CRS84')$proj4string)
 
   ## find average UTM zone using longitude(s) of SpatialPoints object
   zone <- chooseUTM(x@coords[, 1])
@@ -161,7 +161,7 @@ projectUTM.SpatialPoints <- function(x) {
 projectUTM.SpatialPolygonsDataFrame <- function(x) {
 
   ## if not long-lat, transform to WGS84
-  if (is.projected(x)) x <- spTransform(x, st_crs(4326)$proj4string)
+  if (is.projected(x)) x <- spTransform(x, st_crs('OGC:CRS84')$proj4string)
 
   ## find average UTM zone using longitude(s) of SpatialPolygons object
   zone <- chooseUTM(polycoords(x)[, 1])
@@ -194,7 +194,7 @@ projectUTM.SpatialPolygonsDataFrame <- function(x) {
 projectUTM.SpatialPolygons <- function(x) {
 
   ## if not long-lat, transform to WGS84
-  if (is.projected(x)) x <- spTransform(x, st_crs(4326)$proj4string)
+  if (is.projected(x)) x <- spTransform(x, st_crs('OGC:CRS84')$proj4string)
 
   ## find average UTM zone using longitude(s) of SpatialPolygons object
   zone <- chooseUTM(polycoords(x)[, 1])
