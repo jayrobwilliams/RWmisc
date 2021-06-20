@@ -1,29 +1,17 @@
-## Resubmission notes
-
-This is a resubmission. In this version I have:
-
-* Fixed the Date field in DESCRIPTION from 2020-01-14 to 2021-02-17
-* I forgot to confirm the initial resubmission on 2021-01-14, so I am resubmitting again
-* Used TRUE and FALSE throughout
-* Added a \value to theme_rw.Rd
-* Used requireNamespace instead of installed.packages()
-* Reset user's par() in vignette spatial-utility-function.Rmd
-
 ## Test environments
 
-* local macOS 10.13.6, release
+* local Ubuntu 20.04, release
 * GitHub Actions Ubuntu 20.04, release
 * GitHub Actions Ubuntu 20.04, devel
 * GitHub Actions Ubuntu 20.04, oldrel
 * GitHub Actions Windows latest, release
+* GitHub Actions macOS latest, release
 * win-builder, release
 
 ## R CMD check results
 
-There were no ERRORs or WARNINGs, one NOTE
-
-NOTE: new submission
+There were no ERRORs or WARNINGs, or NOTEs
 
 ## Downstream dependencies
 
-* This is an initial CRAN submission so there are no downstream dependencies
+* There are no downstream dependencies currently on CRAN
