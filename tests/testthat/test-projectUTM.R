@@ -2,7 +2,7 @@ library(sf)
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
 poly_t <- st_sfc(st_polygon(list(rbind(c(10,-10), c(10,-20), c(20,-20),
                                        c(20,-10), c(10,-10)))),
-                 crs = 4326)
+                 crs = st_crs('OGC:CRS84'))
 
 test_that("projectUTM works with sfc_POLYGON", {
   expect_equal(st_crs(projectUTM(st_cast(nc[1,], "POLYGON")))[["input"]],

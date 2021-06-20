@@ -38,7 +38,7 @@
 #'                        st_polygon(list(rbind(c(8,8), c(4,8),
 #'                                              c(4,4), c(8,4),
 #'                                              c(8,8))))),
-#'                   crs = 4326)
+#'                   crs = st_crs('OGC:CRS84'))
 #' raster_t <- raster(nrows = 10, ncols = 10, xmn = 0,
 #'                    xmx = 10, ymn = 0, ymx = 10,
 #'                    vals = 1:100,
