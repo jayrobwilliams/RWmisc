@@ -90,7 +90,7 @@
       <h1 data-toc-skip>Spatial Utility Functions</h1>
                         <h4 class="author">Rob Williams</h4>
             
-            <h4 class="date">2021-06-09</h4>
+            <h4 class="date">2021-06-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jayrobwilliams/RWmisc/blob/master/vignettes/spatial-utility-functions.Rmd"><code>vignettes/spatial-utility-functions.Rmd</code></a></small>
       <div class="hidden name"><code>spatial-utility-functions.Rmd</code></div>
@@ -116,7 +116,7 @@
                                              <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
                        <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">7</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">7</span><span class="op">)</span>,
                                              <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-                  crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
+                  crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="st">'OGC:CRS84'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## create raster</span>
 <span class="va">raster_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">6</span>, ncols <span class="op">=</span> <span class="fl">6</span>, xmn <span class="op">=</span> <span class="fl">2</span>, xmx <span class="op">=</span> <span class="fl">8</span>, ymn <span class="op">=</span> <span class="fl">2</span>, ymx <span class="op">=</span> <span class="fl">8</span>,
@@ -145,7 +145,8 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## read in North Carolina shapefile</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Reading layer `nc' from data source `/Users/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">#&gt; Reading layer `nc' from data source </span>
+<span class="co">#&gt;   `/Users/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">#&gt; Simple feature collection with 100 features and 14 fields</span>
 <span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
 <span class="co">#&gt; Dimension:     XY</span>
@@ -153,29 +154,28 @@
 <span class="co">#&gt; Geodetic CRS:  NAD27</span>
 
 <span class="co">## transform crs to WGS84 and inspect CRS</span>
-<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span>
+<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="st">'OGC:CRS84'</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
 <span class="co">#&gt; Coordinate Reference System:</span>
-<span class="co">#&gt;   User input: EPSG:4326 </span>
+<span class="co">#&gt;   User input: OGC:CRS84 </span>
 <span class="co">#&gt;   wkt:</span>
 <span class="co">#&gt; GEOGCRS["WGS 84",</span>
 <span class="co">#&gt;     DATUM["World Geodetic System 1984",</span>
 <span class="co">#&gt;         ELLIPSOID["WGS 84",6378137,298.257223563,</span>
-<span class="co">#&gt;             LENGTHUNIT["metre",1]]],</span>
+<span class="co">#&gt;             LENGTHUNIT["metre",1]],</span>
+<span class="co">#&gt;         ID["EPSG",6326]],</span>
 <span class="co">#&gt;     PRIMEM["Greenwich",0,</span>
-<span class="co">#&gt;         ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="co">#&gt;         ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class="co">#&gt;         ID["EPSG",8901]],</span>
 <span class="co">#&gt;     CS[ellipsoidal,2],</span>
-<span class="co">#&gt;         AXIS["geodetic latitude (Lat)",north,</span>
+<span class="co">#&gt;         AXIS["longitude",east,</span>
 <span class="co">#&gt;             ORDER[1],</span>
-<span class="co">#&gt;             ANGLEUNIT["degree",0.0174532925199433]],</span>
-<span class="co">#&gt;         AXIS["geodetic longitude (Lon)",east,</span>
+<span class="co">#&gt;             ANGLEUNIT["degree",0.0174532925199433,</span>
+<span class="co">#&gt;                 ID["EPSG",9122]]],</span>
+<span class="co">#&gt;         AXIS["latitude",north,</span>
 <span class="co">#&gt;             ORDER[2],</span>
-<span class="co">#&gt;             ANGLEUNIT["degree",0.0174532925199433]],</span>
-<span class="co">#&gt;     USAGE[</span>
-<span class="co">#&gt;         SCOPE["Horizontal component of 3D system."],</span>
-<span class="co">#&gt;         AREA["World."],</span>
-<span class="co">#&gt;         BBOX[-90,-180,90,180]],</span>
-<span class="co">#&gt;     ID["EPSG",4326]]</span>
+<span class="co">#&gt;             ANGLEUNIT["degree",0.0174532925199433,</span>
+<span class="co">#&gt;                 ID["EPSG",9122]]]]</span>
 
 <span class="co">## project to UTM and inspect CRS</span>
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="fu"><a href="../reference/projectUTM.html">projectUTM</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>
@@ -238,14 +238,11 @@
 <span class="va">nc_centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
 <span class="co">#&gt; Warning in st_centroid.sf(nc): st_centroid assumes attributes are constant over</span>
 <span class="co">#&gt; geometries of x</span>
-<span class="co">#&gt; Warning in st_centroid.sfc(st_geometry(x), of_largest_polygon =</span>
-<span class="co">#&gt; of_largest_polygon): st_centroid does not give correct centroids for longitude/</span>
-<span class="co">#&gt; latitude data</span>
 
 <span class="co">## calculate maximum distance</span>
 <span class="fu"><a href="../reference/point.poly.dist.html">point.poly.dist</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, max <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; Loading required namespace: geosphere</span>
-<span class="co">#&gt; 33561.23 [m]</span></code></pre></div>
+<span class="co">#&gt; 33564.95 [m]</span></code></pre></div>
 <p>The following illustration depicts the line connecting the centroid of the polygon to the farthest point on the polygon (red) and the nearest point on the polygon (blue).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -281,9 +278,9 @@
                                                 <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span>,
                                times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 <span class="co">#&gt; Unit: milliseconds</span>
-<span class="co">#&gt;  expr       min        lq      mean    median       uq      max neval</span>
-<span class="co">#&gt;    pk  6.782537  6.903102  7.209632  7.003371  7.17566 11.48381   100</span>
-<span class="co">#&gt;    sf 11.829614 12.026601 12.598433 12.146395 12.45267 17.16254   100</span></code></pre></div>
+<span class="co">#&gt;  expr      min       lq     mean   median       uq      max neval</span>
+<span class="co">#&gt;    pk 10.24231 10.70533 11.22679 10.96268 11.30971 16.62345   100</span>
+<span class="co">#&gt;    sf 11.26613 11.56649 12.31737 11.84062 12.14210 17.96303   100</span></code></pre></div>
 </div>
   </div>
 
