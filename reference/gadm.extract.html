@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • RWmisc</title>
+<title>Extract layers by country from GADM GeoPackage file — gadm.extract • RWmisc</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Extract layers by country from GADM GeoPackage file — gadm.extract" />
+<meta property="og:description" content="Extract one or more levels of administrative unit geometries from the GADM
+database in GeoPackage format" />
 <meta property="og:image" content="https://jayrobwilliams.com/RWmisc/articles/spatial-utility-functions_files/figure-html/point-poly-dist-illus-1.png" />
 <meta property="og:image:alt" content="Maximum and minimum distances from a point inside a polygon to an edge" />
 <meta name="twitter:card" content="summary" />
@@ -63,7 +65,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -125,78 +127,72 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Extract layers by country from GADM GeoPackage file</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jayrobwilliams/RWmisc/blob/master/R/gadm.extract.R'><code>R/gadm.extract.R</code></a></small>
+    <div class="hidden name"><code>gadm.extract.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Extract one or more levels of administrative unit geometries from the GADM
+database in GeoPackage format</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>gadm.extract</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, countries <span class='op'>=</span> <span class='cn'>NULL</span>, level <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>5</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="UTM.functions.html">long2UTM()</a></code> <code><a href="UTM.functions.html">UTMzones()</a></code> <code><a href="UTM.functions.html">chooseUTM()</a></code> </p>
-        </td>
-        <td><p>UTM Convenience Functions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dms2dd.html">dms2dd()</a></code> </p>
-        </td>
-        <td><p>Convert from degrees, minutes, and seconds to decimal degrees</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gadm.extract.html">gadm.extract()</a></code> </p>
-        </td>
-        <td><p>Extract layers by country from GADM GeoPackage file</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="overlap.weight.html">overlap.weight()</a></code> </p>
-        </td>
-        <td><p>Weight Raster Cells by Overlapping Polygons</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="point.poly.dist.html">point.poly.dist()</a></code> </p>
-        </td>
-        <td><p>Point-Polygon Distances</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="projectUTM.html">projectUTM()</a></code> </p>
-        </td>
-        <td><p>Project to UTM</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="theme_rw.html">theme_rw()</a></code> </p>
-        </td>
-        <td><p>Blank Theme</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>input</th>
+      <td><p>GeoPackage file to read from</p></td>
+    </tr>
+    <tr>
+      <th>output</th>
+      <td><p>name of file to save output to</p></td>
+    </tr>
+    <tr>
+      <th>countries</th>
+      <td><p>country or countries to limit results to, if <code>NULL</code> returns
+all countries</p></td>
+    </tr>
+    <tr>
+      <th>level</th>
+      <td><p>level(s) of administrative units 0:5 to extract; note not all
+levels are defined for all countries</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments passed to <code><a href='https://r-spatial.github.io/sf/reference/st_write.html'>sf::st_write()</a></code></p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function is designed to extract subsets of the
+<a href='https://gadm.org/'>Database of Global Administrative Areas (GADM)</a>. It uses
+the version of the database in GeoPackage format that provides one layer for
+each level of administrative division, available at
+<a href='https://gadm.org/download_world.html'>https://gadm.org/download_world.html</a>.
+The current version of this file is <code>gadm36_levels.gpkg</code>. It is intended
+for programmatic and reproducible subsetting of the database without
+requiring the user to individually download specific country data files.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'>## extract</span>
+<span class='fu'>gadm.extract</span><span class='op'>(</span><span class='st'>"gadm36_levels.gpkg"</span>, <span class='st'>"Nordics.gpkg"</span>,
+             <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Denmark"</span>, <span class='st'>"Finland"</span>, <span class='st'>"Iceland"</span>, <span class='st'>"Norway"</span>, <span class='st'>"Sweden"</span><span class='op'>)</span>,
+             level <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
+
+<span class='co'>## add layers 3 and 4, use delete_layer = TRUE to rewrite existing layers</span>
+<span class='fu'>gadm.extract</span><span class='op'>(</span><span class='st'>"gadm36_levels.gpkg"</span>, <span class='st'>"Nordics.gpkg"</span>,
+             <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Denmark"</span>, <span class='st'>"Finland"</span>, <span class='st'>"Iceland"</span>, <span class='st'>"Norway"</span>, <span class='st'>"Sweden"</span><span class='op'>)</span>,
+             level <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>4</span>, delete_layer <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
