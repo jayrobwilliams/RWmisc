@@ -6,6 +6,9 @@
 \usage{
 theme_rw()
 }
+\value{
+A ggplot \link[ggplot2:theme]{theme} object.
+}
 \description{
 A ggplot theme with no grid elements or gray background.
 }

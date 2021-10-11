@@ -4,7 +4,7 @@
 \name{RWmisc-package}
 \alias{RWmisc}
 \alias{RWmisc-package}
-\title{RWmisc: Rob Williams Miscellaneous Functions}
+\title{RWmisc: Miscellaneous Spatial Functions}
 \description{
 Contains convenience functions for working with spatial data across
     multiple UTM zones, raster-vector operations common in the analysis of 
@@ -12,7 +12,7 @@ Contains convenience functions for working with spatial data across
     longitude coordinates to decimal degrees.
 }
 \details{
-Convenience functions for working with spatial data and my workflow.
+Convenience functions for working with spatial data.
 }
 \seealso{
 Useful links:

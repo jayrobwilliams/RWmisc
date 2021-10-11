@@ -19,12 +19,12 @@
 #' @examples
 #' library(sf)
 #' polys <- st_sfc(st_polygon(list(rbind(c(0,0), c(0,1), c(1,1), c(1,0), c(0,0)))),
-#' crs = 4326)
+#' crs = st_crs('OGC:CRS84'))
 #' points <- st_sfc(st_multipoint(rbind(c(.25, .5), c(.75, .5), c(.5, .5))),
-#'                  crs = 4326)
+#'                  crs = st_crs('OGC:CRS84'))
 #' point.poly.dist(points, polys)
 
-point.poly.dist <- function(point, poly, max = T, by_element = F) {
+point.poly.dist <- function(point, poly, max = TRUE, by_element = FALSE) {
 
   ## convert to sfc if necessary
   if (inherits(poly, 'Spatial')) poly <- st_as_sfc(poly)
@@ -39,6 +39,13 @@ point.poly.dist <- function(point, poly, max = T, by_element = F) {
 
   ## calculate distance from point to every border vertex
   if (st_is_longlat(poly)) {
+
+    if (!requireNamespace("geosphere")) {
+      stop(paste0("Package geosphere required to calculate distances for ",
+                  "unprojected data\n",
+                  "Install with: install.packages(\"geosphere\")\n"))
+    }
+
     dists <- do.call(rbind,
                      lapply(split(point, seq(nrow(point))),
                             function(x) geosphere::distGeo(border, x)))

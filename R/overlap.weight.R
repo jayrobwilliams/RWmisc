@@ -38,14 +38,14 @@
 #'                        st_polygon(list(rbind(c(8,8), c(4,8),
 #'                                              c(4,4), c(8,4),
 #'                                              c(8,8))))),
-#'                   crs = 4326)
+#'                   crs = st_crs('OGC:CRS84'))
 #' raster_t <- raster(nrows = 10, ncols = 10, xmn = 0,
 #'                    xmx = 10, ymn = 0, ymx = 10,
 #'                    vals = 1:100,
 #'                    crs = CRS(st_crs(polys_t)$proj4string))
 #' overlap.weight(raster_t, polys_t)
 
-overlap.weight <- function(raster, polygons, count = F, warn = T) {
+overlap.weight <- function(raster, polygons, count = FALSE, warn = TRUE) {
 
   polygons <- poly.conv(polygons, raster)
 

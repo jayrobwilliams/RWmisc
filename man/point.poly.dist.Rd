@@ -4,7 +4,7 @@
 \alias{point.poly.dist}
 \title{Point-Polygon Distances}
 \usage{
-point.poly.dist(point, poly, max = T, by_element = F)
+point.poly.dist(point, poly, max = TRUE, by_element = FALSE)
 }
 \arguments{
 \item{point}{A simplefeatures object of class point.}
@@ -26,8 +26,8 @@ of a given polygon.
 \examples{
 library(sf)
 polys <- st_sfc(st_polygon(list(rbind(c(0,0), c(0,1), c(1,1), c(1,0), c(0,0)))),
-crs = 4326)
+crs = st_crs('OGC:CRS84'))
 points <- st_sfc(st_multipoint(rbind(c(.25, .5), c(.75, .5), c(.5, .5))),
-                 crs = 4326)
+                 crs = st_crs('OGC:CRS84'))
 point.poly.dist(points, polys)
 }
