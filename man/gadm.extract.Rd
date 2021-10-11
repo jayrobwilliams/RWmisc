@@ -4,7 +4,7 @@
 \alias{gadm.extract}
 \title{Extract layers by country from GADM GeoPackage file}
 \usage{
-gadm.extract(input, output, countries = NULL, level = 0:4, ...)
+gadm.extract(input, output, countries = NULL, level = 0:5, ...)
 }
 \arguments{
 \item{input}{GeoPackage file to read from}
@@ -14,18 +14,35 @@ gadm.extract(input, output, countries = NULL, level = 0:4, ...)
 \item{countries}{country or countries to limit results to, if \code{NULL} returns
 all countries}
 
-\item{level}{level(s) of administrative units 0:4 to extract; note level 4 is
-not available for all countries}
+\item{level}{level(s) of administrative units 0:5 to extract; note not all
+levels are defined for all countries}
 
 \item{...}{additional arguments passed to \code{\link[sf:st_write]{sf::st_write()}}}
 }
 \description{
-Extract one or more levels of administrative unit geometries from
+Extract one or more levels of administrative unit geometries from the GADM
+database in GeoPackage format
+}
+\details{
+This function is designed to extract subsets of the
+\href{https://gadm.org/}{Database of Global Administrative Areas (GADM)}. It uses
+the version of the database in GeoPackage format that provides one layer for
+each level of administrative division, available at
+\url{https://gadm.org/download_world.html}.
+The current version of this file is \code{gadm36_levels.gpkg}. It is intended
+for programmatic and reproducible subsetting of the database without
+requiring the user to individually download specific country data files.
 }
 \examples{
 \dontrun{
-gadm.extract("gadm34_levels.gpkg", "Nordics.gpkg",
+## extract
+gadm.extract("gadm36_levels.gpkg", "Nordics.gpkg",
              c("Denmark", "Finland", "Iceland", "Norway", "Sweden"),
-             level = 0:4)
+             level = 0:2)
+
+## add layers 3 and 4, use delete_layer = TRUE to rewrite existing layers
+gadm.extract("gadm36_levels.gpkg", "Nordics.gpkg",
+             c("Denmark", "Finland", "Iceland", "Norway", "Sweden"),
+             level = 0:4, delete_layer = TRUE)
 }
 }
