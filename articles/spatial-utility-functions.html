@@ -24,6 +24,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,18 +38,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RWmisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -69,7 +65,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jayrobwilliams/RWmisc/">
+  <a href="https://github.com/jayrobwilliams/RWmisc/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,11 +84,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Spatial Utility Functions</h1>
-                        <h4 class="author">Rob Williams</h4>
+                        <h4 data-toc-skip class="author">Rob Williams</h4>
             
-            <h4 class="date">2021-10-11</h4>
+            <h4 data-toc-skip class="date">2022-01-18</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/jayrobwilliams/RWmisc/blob/master/vignettes/spatial-utility-functions.Rmd"><code>vignettes/spatial-utility-functions.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jayrobwilliams/RWmisc/blob/HEAD/vignettes/spatial-utility-functions.Rmd" class="external-link"><code>vignettes/spatial-utility-functions.Rmd</code></a></small>
       <div class="hidden name"><code>spatial-utility-functions.Rmd</code></div>
 
     </div>
@@ -101,50 +97,50 @@
     
 <p>This package contains convenience functions for carrying out GIS operations that I have repeatedly encountered in my research. The following packages are used in this vignette:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster">raster</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jayrobwilliams/RWmisc">RWmisc</a></span><span class="op">)</span></code></pre></div>
-<div id="weighting-raster-values-by-overlapping-polygons" class="section level1">
-<h1 class="hasAnchor">
-<a href="#weighting-raster-values-by-overlapping-polygons" class="anchor"></a>Weighting raster values by overlapping polygons</h1>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jayrobwilliams/RWmisc" class="external-link">RWmisc</a></span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="weighting-raster-values-by-overlapping-polygons">Weighting raster values by overlapping polygons<a class="anchor" aria-label="anchor" href="#weighting-raster-values-by-overlapping-polygons"></a>
+</h2>
 <p>The <code>overlap.weight</code> function allows you to weight the values of a raster cell by the inverse of the number of polygons that overlap the cell. This is useful when, e.g., calculating the population of ethnic group settlement areas when different group settlement areas can overlap one another. The <code>count</code> argument allows the count of overlapping polygons to be returned instead of the weighted cell values. Note that this converts any cells not covered by at least one polygon to <code>NA</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## create three overlapping squares</span>
-<span class="va">polys_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">6</span><span class="op">)</span>,
-                                             <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-                       <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">)</span>,
-                                             <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-                       <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">7</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">7</span><span class="op">)</span>,
-                                             <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-                  crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="st">'OGC:CRS84'</span><span class="op">)</span><span class="op">)</span>
+<span class="va">polys_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">6</span><span class="op">)</span>,
+                                             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+                       <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">)</span>,
+                                             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+                       <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">7</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">7</span><span class="op">)</span>,
+                                             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+                  crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="st">'OGC:CRS84'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## create raster</span>
-<span class="va">raster_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">6</span>, ncols <span class="op">=</span> <span class="fl">6</span>, xmn <span class="op">=</span> <span class="fl">2</span>, xmx <span class="op">=</span> <span class="fl">8</span>, ymn <span class="op">=</span> <span class="fl">2</span>, ymx <span class="op">=</span> <span class="fl">8</span>,
-                   vals <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">36</span>, crs <span class="op">=</span> <span class="fu">CRS</span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">polys_t</span><span class="op">)</span><span class="op">$</span><span class="va">proj4string</span><span class="op">)</span><span class="op">)</span>
+<span class="va">raster_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">6</span>, ncols <span class="op">=</span> <span class="fl">6</span>, xmn <span class="op">=</span> <span class="fl">2</span>, xmx <span class="op">=</span> <span class="fl">8</span>, ymn <span class="op">=</span> <span class="fl">2</span>, ymx <span class="op">=</span> <span class="fl">8</span>,
+                   vals <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">36</span>, crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">polys_t</span><span class="op">)</span><span class="op">$</span><span class="va">proj4string</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## set plotting parameters</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## plot raw raster values</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">raster_t</span>, main <span class="op">=</span> <span class="st">'raw'</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">polys_t</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">raster_t</span>, main <span class="op">=</span> <span class="st">'raw'</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">polys_t</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co">## plot count of overlapping polygons</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/overlap.weight.html">overlap.weight</a></span><span class="op">(</span><span class="va">raster_t</span>, <span class="va">polys_t</span>, count <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">polys_t</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/overlap.weight.html">overlap.weight</a></span><span class="op">(</span><span class="va">raster_t</span>, <span class="va">polys_t</span>, count <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">polys_t</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co">## plot overlap-weighted raster values</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/overlap.weight.html">overlap.weight</a></span><span class="op">(</span><span class="va">raster_t</span>, <span class="va">polys_t</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"weighted"</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">polys_t</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/overlap.weight.html">overlap.weight</a></span><span class="op">(</span><span class="va">raster_t</span>, <span class="va">polys_t</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"weighted"</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">polys_t</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="spatial-utility-functions_files/figure-html/overlap-weight-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
-<div id="projecting-spatial-objects-to-utm" class="section level1">
-<h1 class="hasAnchor">
-<a href="#projecting-spatial-objects-to-utm" class="anchor"></a>Projecting spatial objects to UTM</h1>
+<div class="section level2">
+<h2 id="projecting-spatial-objects-to-utm">Projecting spatial objects to UTM<a class="anchor" aria-label="anchor" href="#projecting-spatial-objects-to-utm"></a>
+</h2>
 <p>The <code>projectUTM</code> function converts any <code>sf</code> or <code>sfc</code> objects in longitude, latitude decimal degrees to the UTM zone where the majority of the data lie. This function accounts for North and South UTM zones as well.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## read in North Carolina shapefile</span>
-<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Reading layer `nc' from data source </span>
 <span class="co">#&gt;   `/Users/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">#&gt; Simple feature collection with 100 features and 14 fields</span>
@@ -154,8 +150,8 @@
 <span class="co">#&gt; Geodetic CRS:  NAD27</span>
 
 <span class="co">## transform crs to WGS84 and inspect CRS</span>
-<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="st">'OGC:CRS84'</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
+<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="st">'OGC:CRS84'</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
 <span class="co">#&gt; Coordinate Reference System:</span>
 <span class="co">#&gt;   User input: OGC:CRS84 </span>
 <span class="co">#&gt;   wkt:</span>
@@ -178,7 +174,7 @@
 <span class="co">#&gt;                 ID["EPSG",9122]]]]</span>
 
 <span class="co">## project to UTM and inspect CRS</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="fu"><a href="../reference/projectUTM.html">projectUTM</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fu"><a href="../reference/projectUTM.html">projectUTM</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Coordinate Reference System:</span>
 <span class="co">#&gt;   User input: +proj=utm +zone=17 </span>
 <span class="co">#&gt;   wkt:</span>
@@ -222,20 +218,20 @@
 <p>Projection of the North Carolina polygons can be further seen by plotting them.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## set plotting parameters</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## plot WGS84 and UTM projected North Carolina</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/projectUTM.html">projectUTM</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/projectUTM.html">projectUTM</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span></code></pre></div>
 <p><img src="spatial-utility-functions_files/figure-html/projectUTM-plot-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
-<div id="maximum-and-minimum-distance-from-points-to-a-polygon" class="section level1">
-<h1 class="hasAnchor">
-<a href="#maximum-and-minimum-distance-from-points-to-a-polygon" class="anchor"></a>Maximum and minimum distance from point(s) to a polygon</h1>
+<div class="section level2">
+<h2 id="maximum-and-minimum-distance-from-points-to-a-polygon">Maximum and minimum distance from point(s) to a polygon<a class="anchor" aria-label="anchor" href="#maximum-and-minimum-distance-from-points-to-a-polygon"></a>
+</h2>
 <p>The <code>point.poly.dist</code> function computes the maximum or minimum distance from a point or set of points to a polygon. It correctly calculates distances for both geographic and projected data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## create north carolina centroids</span>
-<span class="va">nc_centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
+<span class="va">nc_centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
 <span class="co">#&gt; Warning in st_centroid.sf(nc): st_centroid assumes attributes are constant over</span>
 <span class="co">#&gt; geometries of x</span>
 
@@ -245,42 +241,42 @@
 <span class="co">#&gt; 33564.95 [m]</span></code></pre></div>
 <p>The following illustration depicts the line connecting the centroid of the polygon to the farthest point on the polygon (red) and the nearest point on the polygon (blue).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nc_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="st">'POINT'</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">nc_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="st">'POINT'</span><span class="op">)</span>
 
-<span class="va">farthest_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc_points</span>, <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/raster/man/which.minmax.html">which.max</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">farthest_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance</a></span><span class="op">(</span><span class="va">nc_points</span>, <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/raster/man/which.minmax.html" class="external-link">which.max</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">farthest_point</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">nc_points</span><span class="op">[</span><span class="va">farthest_ind</span><span class="op">]</span><span class="op">)</span>,
-                        <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">farthest_point</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">nc_points</span><span class="op">[</span><span class="va">farthest_ind</span><span class="op">]</span><span class="op">)</span>,
+                        <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">nearest_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc_points</span>, <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/raster/man/which.minmax.html">which.min</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">nearest_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance</a></span><span class="op">(</span><span class="va">nc_points</span>, <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/raster/man/which.minmax.html" class="external-link">which.min</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">nearest_point</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">nc_points</span><span class="op">[</span><span class="va">nearest_ind</span><span class="op">]</span><span class="op">)</span>,
-                        <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">nearest_point</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">nc_points</span><span class="op">[</span><span class="va">nearest_ind</span><span class="op">]</span><span class="op">)</span>,
+                        <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co">## plot</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">farthest_point</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nearest_point</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">'blue'</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">farthest_point</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">nearest_point</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">'blue'</span><span class="op">)</span></code></pre></div>
 <p><img src="spatial-utility-functions_files/figure-html/point-poly-dist-illus-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Carrying out the same calculations using built-in <code>sf</code> functions takes roughly twice as long to execute.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html">microbenchmark</a></span><span class="op">(</span>pk <span class="op">=</span> <span class="fu"><a href="../reference/point.poly.dist.html">point.poly.dist</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>,
+<code class="sourceCode R"><span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span>pk <span class="op">=</span> <span class="fu"><a href="../reference/point.poly.dist.html">point.poly.dist</a></span><span class="op">(</span><span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>,
                                                     <span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, max <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                               sf <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span>,
+                               sf <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span>,
                                                         <span class="st">'POINT'</span><span class="op">)</span><span class="op">[</span><span class="va">farthest_ind</span><span class="op">]</span>,
                                                 <span class="va">nc_centroids</span><span class="op">[</span><span class="fl">53</span>,<span class="op">]</span><span class="op">)</span>,
                                times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 <span class="co">#&gt; Unit: milliseconds</span>
 <span class="co">#&gt;  expr      min       lq     mean   median       uq      max neval</span>
-<span class="co">#&gt;    pk 12.71676 15.89133 20.74560 19.01214 22.72798 58.16403   100</span>
-<span class="co">#&gt;    sf 13.37802 15.51553 20.61227 17.32201 22.46324 78.63173   100</span></code></pre></div>
+<span class="co">#&gt;    pk 10.57678 10.94852 11.35055 11.24583 11.45476 19.26968   100</span>
+<span class="co">#&gt;    sf 11.62092 11.99007 12.47467 12.22512 12.47465 20.05273   100</span></code></pre></div>
 </div>
   </div>
 
@@ -295,11 +291,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Rob Williams.</p>
+  <p></p>
+<p>Developed by Rob Williams.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -307,6 +305,8 @@
 
   
 
+
+  
 
   </body>
 </html>
