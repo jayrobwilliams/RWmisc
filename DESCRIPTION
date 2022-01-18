@@ -1,8 +1,8 @@
 Package: RWmisc
 Type: Package
 Title: Miscellaneous Spatial Functions
-Date: 2021-02-18
-Version: 0.1.0.9000
+Date: 2021-06-19
+Version: 0.1.1.9000
 Authors@R: person("Rob", "Williams", email = "jayrobwilliams@gmail.com", 
              role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9259-3883"))
 Description: Contains convenience functions for working with spatial data across
@@ -27,7 +27,6 @@ Suggests:
     covr
 License: GPL (>=3)
 Encoding: UTF-8
-LazyData: true
 URL: https://github.com/jayrobwilliams/RWmisc
 BugReports: https://github.com/jayrobwilliams/RWmisc/issues
 VignetteBuilder: knitr

@@ -15,11 +15,6 @@ test_that("point.poly.dist works with arguments", {
                tolerance = 1e-3)
 })
 
-test_that("point.poly.dist works with Spatial", {
-  expect_error(point.poly.dist(as_Spatial(points_t), poly_t), NA)
-  expect_error(point.poly.dist(points_t, as_Spatial(poly_t)), NA)
-})
-
 test_that("point.poly.dist works with projected CRS", {
   expect_equal(point.poly.dist(points_t, projectUTM(poly_t)), 100201.5,
                tolerance = 1e-3)
